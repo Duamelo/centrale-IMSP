@@ -9,13 +9,13 @@ Un framework puissant, efficace, rapide en exécution. </p>
 
 
 
-<img src="/assets/img/im1.png" width="700" height="100"/>
+<img src="/assets/img/im1.png" width="500" height="100"/>
 
 
 
-<img src="/assets/img/im2.png" width="700" height="100"/>
+<img src="/assets/img/im2.png" width="500" height="100"/>
 
 
 
 
-<img src="/assets/img/im3.png" width="700" height="100"/>
+<img src="/assets/img/im3.png" width="500" height="100"/>
