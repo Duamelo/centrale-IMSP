@@ -1,47 +1,41 @@
-
 exports.mesure = {
-    list: [
-        {
-            "id": 1,
+    GetTableList(id) {
+        return this.list
+    },
+    GetData(table) {
+        const values = this.list
+        var labels = values.map((record) => {
+            return record.recordtime
+        })
+        var datas = Array.from(table["var-fonc-per"], (variable) => {
+            var result = {}
+            result[variable.vare] = values.map((values) => values[variable.vare])
+            return result
+        })
+        return {
+            labels,
+            datas
+        }
+    },
+    list: [{
             "recordtime": "2021-01-14 14:30:00",
             "Ux": 2,
             "Uy": 3,
             "Uz": 1
+
         },
         {
-            "id": 2,
             "recordtime": "2021-01-14 14:30:00",
-            "Ux": 2,
+            "Ux": 3,
             "Uy": 3,
             "Uz": 1
-        },
-        {
-            "id": 2,
+
+        }, {
             "recordtime": "2021-01-14 14:30:00",
-            "Ux": 2,
+            "Ux": 7,
             "Uy": 3,
             "Uz": 1
+
         }
     ]
-}
-
-
-exports.avg = (Tmesure, sortie, periode, indice_courant, print_function)=> {
-    return
-}
-
-
-
-exports.min = (Tmesure, sortie, periode, indice_courant, print_function)=> {
-    return
-}
-
-
-exports.max = (Tmesure, sortie, periode, indice_courant, print_function)=> {
-    return
-}
-
-
-exports.stddev = (Tmesure, sortie, periode, indice_courant, print_function)=> {
-    return    
 }
