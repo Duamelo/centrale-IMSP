@@ -124,3 +124,37 @@ body {
   top: 30px;
   margin-bottom: 55px;
 }
+
+
+.gauche{
+  position: relative;
+  width: 50%;
+  float: left;
+}
+
+.droit{
+  position: relative;
+  float: right;
+  
+}
+
+
+.main{
+  margin-top: 35px;
+}
+
+
+
+
+input, label{
+    margin: .4rem 0;
+}
+
+.periode{
+  position: relative;
+  width:  50px;
+}
+
+.calendrier {
+  position: relative;
+}

@@ -1,0 +1,14 @@
+with ids as (select id from sortie where nom_sortie='Ux') select * from mesures where id_sortie in (select * from ids) and recordtime > now() -(10 *  INTERVAL '1 month') order by recordtime;
+
+with ids as (values (1),(2)) select * from mesures where id_sortie in (select * from ids) and recordtime > now() -(10 *  INTERVAL '1 month') order by recordtime;
+
+
+
+
+select date_trunc('day', recordtime) AS recordtime, avg(valeur) AS "avg_ux", min(valeur) AS "min_ux", max(valeur) AS "max_ux" from mesures where id_sortie=1 group by recordtime;
+
+
+with newtable as (select recordtime, (select valeur from mesures m1 where m1.id_sortie=1 and m1.recordtime=m.recordtime limit 1) as id1,(select valeur from mesures m2 where m2.id_sortie=2 and m2.recordtime=m.recordtime limit 1) as id2 from mesures m) select ts_round(recordtime, 2) as tt, avg(id1), avg(id2) from newtable group by tt;
+
+
+with output as (select sortie, fonction, periode from tables where nom='meteo'), ids as (select id, nom_sortie from sortie where nom_sortie in (select sortie from output)) select id, nom_sortie, fonction, periode from ids inner join output on ids.nom_sortie=output.sortie;

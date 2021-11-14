@@ -1,9 +1,8 @@
-import * as m from "mithril"
-import * as   capteur from "./views/capteur"
-import * as table from "./views/table"
-import * as layout from "./views/layout"
-import * as mesure from "./views/mesure"
-//import * as  modal from "./views/modal"
+var m = require("mithril");
+var capteur = require ("./views/capteur");
+var table = require("./views/table");
+var layout = require ("./views/layout");
+var mesure = require("./views/mesure");
 
 
 m.route(document.body, "/", {
