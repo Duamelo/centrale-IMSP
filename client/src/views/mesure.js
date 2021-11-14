@@ -46,9 +46,9 @@ const form = {
         form.init()
     },
     view(vnode) {
-        return m("form.d-flex.mt-5.row",
-            m("div.col-md-3.mb-3", [
-                m('label', 'Tableau'),
+        return m("form.mt-5.row",
+            m("div.mt-1.form-group.col-md-3", [
+               // m('label', 'Tableau'),
                 m("select.form-select][placeholder='Nom de la table']", {
                     onchange(e) {
                         form.id_tableau = this.value
@@ -59,8 +59,8 @@ const form = {
                         },
                         value.nom)
                 }))
-            ]), m("div.col-md-3.mb-3", [
-                m('label', 'Debut'),
+            ]), m("div.form-group.col-md-3", [
+               // m('label', 'Debut'),
                 m("input.form-control[type='date'][placeholder='Debut']", {
                     value: form.debut,
                     oninput(e) {
@@ -68,8 +68,8 @@ const form = {
                         console.log(form.debut);
                     }
                 })
-            ]), m("div.col-md-3.mb-3", [
-                m('label', 'Fin'),
+            ]), m("div.form-group.col-md-3", [
+               // m('label', 'Fin'),
                 m("input.form-control[type='date'][placeholder='Fin']", {
                     value: form.fin,
                     oninput(e) {
@@ -77,7 +77,7 @@ const form = {
                         console.log(form.fin);
                     }
                 })
-            ]), m("button.btn.btn-primary.col-md-auto.mb-3[type='button']", {
+            ]), m("button.btn.btn-primary.col-md-3.btn-block[type='button']", {
                 disabled: !form.canSubmit(),
                 onclick(e) {
                     e.preventDefault()
@@ -89,7 +89,6 @@ const form = {
                     })
                 }
             }, "Ok")
-
         )
 
     }
@@ -150,7 +149,8 @@ module.exports = {
     view: function(vnode) {
         return [
             m(form), (form.isReady ?
-                m(graph, {
+                m(table
+                    , {
                     table: form.tables[form.id_tableau]
                 }) : m("H2", "Rien à affiche"))
         ]

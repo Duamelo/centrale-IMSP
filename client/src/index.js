@@ -6,7 +6,7 @@ var mesure = require("./views/mesure");
 const login = require("./views/login");
 
 
-if (window.localStorage['jwt'] == undefined) {
+//if (window.localStorage['jwt'] == undefined) {
     m.route(document.body, "/", {
         "/": {
             render: function() {
@@ -29,11 +29,11 @@ if (window.localStorage['jwt'] == undefined) {
             }
         }
     })
-} else {
-    m.mount(document.body, login)
+//} else {
+  //  m.mount(document.body, login)
     //     {
     //     view: function() {
     //         return m(login)
     //     }
     // })
-}
+//}

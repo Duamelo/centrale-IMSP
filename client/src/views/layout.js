@@ -35,7 +35,7 @@ module.exports = {
                     m("nav.col-md-3.col-lg-2.d-md-block.bg-light.sidebar.collapse[id='sidebarMenu']",
                         m("div.position-sticky.pt-3",
                             [
-                                m('H3.nav-item', "Tableau de bord"),
+                                m('H3.nav-item', ""),
                                 m("ul.nav.flex-column", [{
                                         link: "/capteurs",
                                         title: "Capteurs"
