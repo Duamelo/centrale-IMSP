@@ -9,13 +9,13 @@ Un framework puissant, efficace, rapide en exécution. Le server est en node js 
 
 
 
-<img src="/assets/img/im1.png" width="300" height="100"/>
+<img src="./client/assets/img/im1.png" width="300" height="100"/>
 
 
 
-<img src="/assets/img/im2.png" width="300" height="100"/>
+<img src="./client/assets/img/im2.png" width="300" height="100"/>
 
 
 
 
-<img src="/assets/img/im3.png" width="300" height="100"/>
+<img src="./client/assets/img/im3.png" width="300" height="100"/>
