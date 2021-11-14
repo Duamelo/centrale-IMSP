@@ -1,33 +1,96 @@
-var  table = {
-    list: [
-        {
+var table = {
+    addTable(table) {
+        this.list.push({
+            id: this.list.length,
+            nom: table.table,
+            description: table.description,
+            periode: table.periode,
+            "var-fonc-per": [{
+                vare: table.variable,
+                fonc: table.fonction
+            }]
+        })
+    },
+    addVariableToTable(table, variable) {
+        table["var-fonc-per"].push({
+            vare: variable.nom,
+            fonc: variable.fonction
+        })
+    },
+    list: [{
             "id": 1,
             "nom": "Table A",
             "description": "voici le capteur A",
-            "var-fonc-per": [{vare: "uxa", fonc: "avg", per: "3 sec"}, {vare: "uya", fonc: "std", per: "3 sec"} , {vare: "azert", fonc: "ipsum", per: "3 sec"}]
-            
+            periode: 3,
+            "var-fonc-per": [{
+                vare: "Ux",
+                fonc: "avg"
+            }, {
+                vare: "Uy",
+                fonc: "std"
+            }, {
+                vare: "Uz",
+                fonc: "ipsum"
+            }]
+
         },
 
         {
-            
+
             "id": 2,
             "nom": "Table B",
             "description": "voici le capteur B",
-            "var-fonc-per": [{vare: "uxb", fonc: "avg", per: "3 sec"}, {vare: "uyb", fonc: "std", per: "3 sec"} , {vare: "uzb", fonc: "ipsum", per: "3 sec"}]
+            periode: 3,
+            "var-fonc-per": [{
+                vare: "uxb",
+                fonc: "avg"
+            }, {
+                vare: "uyb",
+                fonc: "std"
+            }, {
+                vare: "uzb",
+                fonc: "ipsum"
+            }]
         },
 
         {
             "id": 3,
             "nom": "Table C",
             "description": "voici le capteur C",
-            "var-fonc-per": [{vare: "uxa", fonc: "avg", per: "3 sec"}, {vare: "uya", fonc: "std", per: "3 sec"} , {vare: "uze", fonc: "ipsum", per: "3 sec"}, {vare: "uze", fonc: "ipsum", per: "3 sec"}, {vare: "pepe", fonc: "ipsum", per: "3 sec"}]
+            periode: 3,
+            "var-fonc-per": [{
+                vare: "uxa",
+                fonc: "avg"
+            }, {
+                vare: "uya",
+                fonc: "std"
+            }, {
+                vare: "uze",
+                fonc: "ipsum"
+            }, {
+                vare: "uze",
+                fonc: "ipsum"
+            }, {
+                vare: "pepe",
+                fonc: "ipsum"
+            }]
         },
 
         {
             "id": 4,
             "nom": "Table D",
             "description": "voici le capteur D",
-            "var-fonc-per": [{vare: "uxa", fonc: "avg", per: "3 sec"}, {vare: "uya", fonc: "std", per: "3 sec"} , {vare: "caca", fonc: "ipsum", per: "3 sec"}]
+            periode: 3,
+            "var-fonc-per": [{
+                vare: "uxa",
+                fonc: "avg"
+            }, {
+                vare: "uya",
+                fonc: "std"
+            }, {
+                vare: "caca",
+                fonc: "ipsum"
+            }]
         },
 
         {
@@ -35,7 +98,23 @@ var  table = {
             "id": 5,
             "nom": "Table E",
             "description": "voici le capteur E",
-            "var-fonc-per": [{vare: "fghjk", fonc: "avg", per: "3 sec"}, {vare: "UYE", fonc: "std", per: "3 sec"} , {vare: "uze", fonc: "ipsum", per: "3 sec"}, {vare: "uze", fonc: "ipsum", per: "3 sec"}, {vare: "uze", fonc: "ipsum", per: "3 sec"}]
+            periode: 3,
+            "var-fonc-per": [{
+                vare: "fghjk",
+                fonc: "avg"
+            }, {
+                vare: "UYE",
+                fonc: "std"
+            }, {
+                vare: "uze",
+                fonc: "ipsum"
+            }, {
+                vare: "uze",
+                fonc: "ipsum"
+            }, {
+                vare: "uze",
+                fonc: "ipsum"
+            }]
         }
 
     ]
@@ -45,11 +124,11 @@ var  table = {
 
 exports.Operation = {
     variableName: "",
-    fonction : "",
+    fonction: "",
     periode: 0,
 
 
-    setVariableName: function (value) {
+    setVariableName: function(value) {
         Operation.variableName = value;
         console.log(value);
     },
@@ -68,7 +147,7 @@ exports.Operation = {
         return Operation.variableName !== "" && Operation.fonction !== "" && Operation.periode !== "";
     },
 
-    createOperation: function () {
+    createOperation: function() {
         var data = this.canSubmit();
 
     }
