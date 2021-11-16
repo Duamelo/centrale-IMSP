@@ -1,4 +1,8 @@
 var m = require('mithril');
+const {
+    loadLogin,
+    getRoutes
+} = require('./loader');
 
 function isActive(route) {
     const current = m.route.get()
@@ -7,6 +11,15 @@ function isActive(route) {
 
 module.exports = {
     view: function(vnode) {
+        const jwt = {
+            payload: {
+                role: "user"
+            }
+        }
+        if (jwt) {
+            var routes = getRoutes(jwt.payload.role);
+        }
+
         return [
             m("header.navbar.navbar-dark.sticky-top.bg-dark.flex-md-nowrap.p-0.shadow",
                 [
@@ -21,7 +34,7 @@ module.exports = {
                             m("a.nav-link[href='#']", {
                                     onclick(e) {
                                         window.localStorage.removeItem('jwt')
-                                        window.location.href = "./"
+                                        loadLogin()
                                     }
                                 },
                                 "Sign out"
@@ -35,17 +48,7 @@ module.exports = {
                     m("nav.col-md-3.col-lg-2.d-md-block.bg-light.sidebar.collapse[id='sidebarMenu']",
                         m("div.position-sticky.pt-3",
                             [
-                                m('H3.nav-item', ""),
-                                m("ul.nav.flex-column", [{
-                                        link: "/capteurs",
-                                        title: "Capteurs"
-                                    }, {
-                                        link: "/tables",
-                                        title: "Tables"
-                                    }, {
-                                        link: "/mesures",
-                                        title: "Mesures"
-                                    }].map((route) => {
+                                m("ul.nav.flex-column", routes.map((route) => {
                                         return m("li.nav-item",
                                             m(m.route.Link, {
                                                     class: "nav-link " + (isActive(route.link) ? "active" : ""),
