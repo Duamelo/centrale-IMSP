@@ -176,6 +176,9 @@ module.exports = {
             //         table: form.tables[form.id_tableau]
             //     }) : m("H2", "Rien à affiche"))
         ]
+    },
+    onremove() {
+        tabs.clear()
     }
 }
 // (form.isReady ?

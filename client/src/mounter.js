@@ -1,0 +1,48 @@
+var m = require("mithril");
+var capteur = require("./views/capteur");
+var table = require("./views/table");
+var layout = require("./views/layout");
+var mesure = require("./views/mesure");
+
+function mountRoutes() {
+    document.body.className = "";
+    const role = "admin";
+    if (role == "admin")
+        m.route(document.body, "/", {
+            "/": {
+                render: function() {
+                    return m(layout, m("h3", "Bienvenue sur l'interface administrateur"));
+                }
+            },
+            "/capteurs": {
+                render: function() {
+                    return m(layout, m(capteur));
+                }
+            },
+            "/tables": {
+                render: function() {
+                    return m(layout, m(table));
+                }
+            },
+            "/mesures": {
+                render: function() {
+                    return m(layout, m(mesure));
+                }
+            }
+        });
+
+    else
+        m.route(document.body, "/", {
+            "/": {
+                render: function() {
+                    return m(layout, m("h3", "Bienvenue sur l'interface administrateur"));
+                }
+            },
+            "/mesures": {
+                render: function() {
+                    return m(layout, m(mesure));
+                }
+            }
+        });
+}
+exports.mountRoutes = mountRoutes;
