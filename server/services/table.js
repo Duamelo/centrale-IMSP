@@ -1,8 +1,8 @@
 var db = require("../db");
 
 
-exports.create= async (nom, sortie, fonction, periode) => {
-    return db.query('insert into tables (nom, sortie, fonction, periode) values ($1, $2, $3, $4) returning *', [nom, sortie, fonction, periode]);
+exports.create= async (auteur, nom, sortie, fonction, periode) => {
+    return db.query('insert into tables (auteur, nom, sortie, fonction, periode) values ($1, $2, $3, $4, $5) returning *', [auteur, nom, sortie, fonction, periode]);
 }
 
 
