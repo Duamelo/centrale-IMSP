@@ -4,6 +4,9 @@ var mesure = require("../models/mesure.model");
 const {
     list
 } = require("../models/table.model");
+const {
+    tabs
+} = require("./tabs");
 const form = {
     _isReady: false,
     get isReady() {
@@ -48,7 +51,7 @@ const form = {
     view(vnode) {
         return m("form.mt-5.row",
             m("div.mt-1.form-group.col-md-3", [
-               // m('label', 'Tableau'),
+                // m('label', 'Tableau'),
                 m("select.form-select][placeholder='Nom de la table']", {
                     onchange(e) {
                         form.id_tableau = this.value
@@ -60,7 +63,7 @@ const form = {
                         value.nom)
                 }))
             ]), m("div.form-group.col-md-3", [
-               // m('label', 'Debut'),
+                // m('label', 'Debut'),
                 m("input.form-control[type='date'][placeholder='Debut']", {
                     value: form.debut,
                     oninput(e) {
@@ -69,7 +72,7 @@ const form = {
                     }
                 })
             ]), m("div.form-group.col-md-3", [
-               // m('label', 'Fin'),
+                // m('label', 'Fin'),
                 m("input.form-control[type='date'][placeholder='Fin']", {
                     value: form.fin,
                     oninput(e) {
@@ -145,14 +148,37 @@ const graph = {
     }
 }
 module.exports = {
-
-    view: function(vnode) {
-        return [
-            m(form), (form.isReady ?
-                m(table
-                    , {
+    oninit() {
+        tabs.addTab({
+            name: "Tableau",
+            view() {
+                return (form.isReady ? m(table, {
                     table: form.tables[form.id_tableau]
                 }) : m("H2", "Rien à affiche"))
+            }
+        })
+        tabs.addTab({
+            name: "Graphe",
+            view() {
+                return (form.isReady ? m(graph, {
+                    table: form.tables[form.id_tableau]
+                }) : m("H2", "Rien à affiche"))
+            }
+        })
+    },
+    view: function(vnode) {
+        return [
+            m(form),
+            m(tabs)
+            // (form.isReady ?
+            //     m(table
+            //         , {
+            //         table: form.tables[form.id_tableau]
+            //     }) : m("H2", "Rien à affiche"))
         ]
+    },
+    onremove() {
+        tabs.clear()
     }
 }
+// (form.isReady ?

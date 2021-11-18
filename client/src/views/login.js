@@ -5,7 +5,7 @@ function jsonToForm(json) {
     Object.keys(json).forEach(key => formData.append(key, json[key]));
     return formData;
 }
-credential = {
+const credential = {
     error: "",
     errorDisplay() {
         return credential.error != "" ? "" : "none"
@@ -27,80 +27,86 @@ credential = {
     set password(value) {
         this._password = value;
     },
-    login() {
+    login(e) {
+        e.preventDefault()
         m.request({
             method: "POST",
-            url: "http://192.168.177.83:2000/api/login",
+            url: server.url + "/auth/login",
             body: {
                 email: credential.email,
                 password: credential.password
             }
         }).then((response) => {
             if (response != undefined) {
-                if (response) {
-                    window.localStorage.setItem('jwt', JSON.stringify(response.token))
-                    window.location.href = "./"
-                } else
-                    credential.error = "Something went wrong"
-            } else
-                credential.error = "Cannot acces the server"
+                jwt.token = response.token
+                mountRoutes()
+            }
+        }, (error) => {
+            if (error.code == 400)
+                credential.error = "Erreur de login"
         })
+        loadRoutes();
     }
 }
 module.exports = {
     view() {
-        return m("div.auth.option2",
-            m("div.auth_left",
-                m("div.card",
-                    m("div.card-body",
+        document.body.className = "text-center signin"
+        return m("main.form-signin",
+            m("form",
+                [
+                    m("h1.h3.mb-3.fw-normal",
+                        "Connection"
+                    ),
+                    m("div.form-floating",
                         [
-                            m("",
-                                m("form",
-                                    [
-                                        m("h1.h3.mb-3.fw-normal",
-                                            "Authentification"
-                                        ),
-                                        m("div.form-floating",
-                                            [
-                                                m("input.form-control[type='email'][id='floatingInput'][placeholder='name@example.com']", {
-                                                    oninput: function(e) {
-                                                        credential.email = e.target.value
-                                                    },
-                                                    value: credential.email
-                                                }),
-                                                m("label[for='floatingInput']",
-                                                    "email"
-                                                )
-                                            ]
-                                        ),
-                                        m("div.form-floating",
-                                            [
-                                                m("input.form-control[type='password'][id='floatingPassword'][placeholder='Password']", {
-                                                    oninput: function(e) {
-                                                        credential.password = e.target.value
-                                                    },
-                                                    value: credential.password
-                                                }),
-                                                m("label[for='floatingPassword']",
-                                                    "mot de passe"
-                                                )
-                                            ]
-                                        ),
-                                        m(".alert.alert-danger[role='alert']", {
-                                            "style": {
-                                                "display": credential.errorDisplay()
-                                            }
-                                        }, credential.error),
-                                        m("input.w-100.btn.btn-lg.btn-primary[type='button'][value='Sign in']", {
-                                            disabled: !credential.canSubmit(),
-                                            onclick: credential.login
-                                        })
-                                    ]
-                                )
+                            m("input.form-control[type='email'][id='emailInput'][placeholder='name@example.com']", {
+                                oninput: function(e) {
+                                    credential.email = e.target.value
+                                },
+                                value: credential.email
+                            }),
+                            m("label[for='emailInput']",
+                                "Email"
                             )
                         ]
+                    ),
+                    m("div.form-floating",
+                        m("input.form-control[type='password'][id='passwordInput'][placeholder='Password']", {
+                            oninput: function(e) {
+                                credential.password = e.target.value
+                            },
+                            value: credential.password
+                        }),
+                        m("label[for='passwordInput']",
+                            "Password"
+                        )
+                    ),
+                    m("div.checkbox.mb-3",
+                        m("label",
+                            [
+                                m("input[type='checkbox'][value='remember-me']"),
+                                " Se souvenir de moi "
+                            ]
+                        )
+                    ),
+                    m(".alert.alert-danger[role='alert']", {
+                        "style": {
+                            "display": credential.errorDisplay()
+                        }
+                    }, credential.error),
+                    m("button.w-100.btn.btn-lg.btn-primary[type='submit']", {
+                            disabled: !credential.canSubmit(),
+                            onclick: credential.login
+                        },
+                        "Se connecter"
+                    ),
+                    m("p.mt-5.mb-3.text-muted",
+                        [
+                            m.trust("&copy;"),
+                            " Centrale Météorologique"
+                        ]
                     )
-                )
+                ]
             )
         )
     }

@@ -4,7 +4,7 @@ const {
     Modal
 } = require("./modal");
 
-
+const jwt = require("../config/jwt")
 var nbAccordion = 0;
 var fonc = ["moyenne", "ecart-type", "max", "min"];
 
@@ -169,9 +169,19 @@ const AjouterUneTable = {
     }
 }
 module.exports = {
+    oninit() {
+        table.getTables(jwt.token.userId)
+    },
     view: function(vnode) {
         var modal;
         return [
+            m(".alert.alert-danger.alert-dismissible[role='alert']", {
+                    class: table.displayErrror() ? "" : "d-none"
+                },
+                [
+                    table.error,
+                    m("button.btn-close[type='button'][data-bs-dismiss='alert'][aria-label='Close']")
+                ]),
             Modal.placeholder,
             m("div.container", {
                 "class": "accordion",
