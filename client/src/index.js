@@ -1,11 +1,16 @@
+var m = require("mithril");
+const login = require("./views/login");
 const {
-    loadRoutes,
-    loadLogin
-} = require("./views/loader");
+    mountRoutes
+} = require("./mounter");
 
-
-if (window.localStorage['jwt'] == undefined) {
-    loadRoutes();
+if (window.localStorage['jwt'] != undefined) {
+    mountRoutes();
 } else {
-    loadLogin();
+    m.mount(document.body, login)
+    //     {
+    //     view: function() {
+    //         return m(login)
+    //     }
+    // })
 }

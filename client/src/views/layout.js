@@ -1,8 +1,12 @@
 var m = require('mithril');
+
+const jwt = require('../config/jwt')
 const {
-    loadLogin,
     getRoutes
-} = require('./loader');
+} = require('../config/routes');
+
+// var login = require("./login")
+
 
 function isActive(route) {
     const current = m.route.get()
@@ -11,14 +15,7 @@ function isActive(route) {
 
 module.exports = {
     view: function(vnode) {
-        const jwt = {
-            payload: {
-                role: "user"
-            }
-        }
-        if (jwt) {
-            var routes = getRoutes(jwt.payload.role);
-        }
+        const email = jwt.token.email
 
         return [
             m("header.navbar.navbar-dark.sticky-top.bg-dark.flex-md-nowrap.p-0.shadow",
@@ -31,13 +28,35 @@ module.exports = {
                     ),
                     m("ul.navbar-nav.px-3",
                         m("li.nav-item.text-nowrap",
-                            m("a.nav-link[href='#']", {
-                                    onclick(e) {
-                                        window.localStorage.removeItem('jwt')
-                                        loadLogin()
-                                    }
-                                },
-                                "Sign out"
+                            m("div.dropdown",
+                                [
+                                    m("a.d-block.link-dark.text-decoration-none.dropdown-toggle[href='#'][id='dropdown'][data-bs-toggle='dropdown'][aria-expanded='false']",
+                                        email
+                                    ),
+                                    m("ul.dropdown-menu.text-small.shadow[aria-labelledby='dropdownUser2']",
+                                        [
+                                            m("li",
+                                                m("a.dropdown-item[href='#']", {
+                                                        onclick(e) {
+                                                            window.localStorage.removeItem('jwt')
+                                                            // m.mount(document.body, login)
+                                                            window.location.reload()
+                                                        }
+                                                    },
+                                                    "Se déconnecter"
+                                                )
+                                            ),
+                                            m("li",
+                                                m("hr.dropdown-divider")
+                                            ),
+                                            m("li",
+                                                m("a.dropdown-item[href='#']",
+                                                    "Paramètre"
+                                                )
+                                            )
+                                        ]
+                                    )
+                                ]
                             )
                         )
                     )
@@ -48,7 +67,8 @@ module.exports = {
                     m("nav.col-md-3.col-lg-2.d-md-block.bg-light.sidebar.collapse[id='sidebarMenu']",
                         m("div.position-sticky.pt-3",
                             [
-                                m("ul.nav.flex-column", routes.map((route) => {
+                                m('H3.nav-item', ""),
+                                m("ul.nav.flex-column", getRoutes("admin").map((route) => {
                                         return m("li.nav-item",
                                             m(m.route.Link, {
                                                     class: "nav-link " + (isActive(route.link) ? "active" : ""),
@@ -67,72 +87,5 @@ module.exports = {
                 )
             )
         ]
-        m("main", [
-            m("header.navbar.navbar-dark.sticky-top.bg-blue.flex-md-nowrap.p-0.shadow.ownclass",
-                m("a.navbar-brand.col-md-3.col-lg-2.me-0.px-3", {
-                    href: "#"
-                }, "Centrale Météorologique"),
-                m("button.navbar-toggler.position-absolute.d-md-none.collapsed[type=button][data-bs-toggle=collapse][data-bs-target=#sidebarMenu][aria-controls=sidebarMenu][aria-expanded=false][aria-label=Toggle nnavigation]",
-                    m("span.navbar-toggler-icon")
-                ),
-                m("div.navbar-nav",
-                    m("div.nav-item.text-nowrap",
-                        m("a.nav-link.px-3[href='#]", {
-                            onclick() {
-                                window.localStorage.removeItem('jwt')
-                                window.location.href = "./"
-                            }
-                        }, "Sign out")
-                    )
-                )
-            ),
-
-            m("div.container-fluid",
-                m("div.row",
-                    m("nav#sidebarMenu.col-md-3.col-lg-2.d-md-block.bg-blue.sidebar.collapse",
-                        m("div.position-sticky.pt-3",
-
-                            m(".nav-item",
-                                m("a.nav-link.active[aria-curent=page][href='#]",
-                                    m("span[data-feather=home]"), "Menu principal")
-
-                            ),
-
-                            m("div.left",
-                                m(m.route.Link, {
-                                        href: "/capteurs"
-                                    },
-                                    "Capteurs"
-                                )
-                            ),
-
-
-                            m("div.left",
-                                m(m.route.Link, {
-                                        href: "/tables"
-                                    },
-                                    "Tables"
-                                )
-                            ),
-
-
-                            m("div.left",
-                                m(m.route.Link, {
-                                        href: "/mesures"
-                                    },
-                                    "Mesures"
-                                )
-                            )
-
-
-
-                        )
-                    ),
-                    m("main.col-md-9.ms-sm-auto.col-lg-10.px-md-4",
-                        vnode.children)
-
-                )
-            )
-        ])
     }
 }

@@ -21,6 +21,9 @@ const tabs = {
             view: tab.view
         });
     },
+    clear() {
+        this.tabs = []
+    },
     view() {
         const tabs = this;
         return [

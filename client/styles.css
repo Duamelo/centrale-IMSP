@@ -55,7 +55,7 @@ body {
 }
 
 .sidebar .nav-link.active {
-    color: hsl(217deg 77% 39%);
+    color: #006ebd;
 }
 
 .sidebar .nav-link:hover .feather,
@@ -164,11 +164,11 @@ label {
 }
 
 html,
-.login {
+.signin {
     height: 100%;
 }
 
-.login {
+.signin {
     display: flex;
     align-items: center;
     padding-top: 40px;

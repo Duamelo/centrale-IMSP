@@ -1,11 +1,4 @@
 var m = require("mithril");
-// const {
-//     loadRoutes,
-//     loadLogin
-const {
-    loadRoutes,
-} = require("./loader");
-
 
 function jsonToForm(json) {
     const formData = new FormData();
@@ -38,27 +31,27 @@ const credential = {
         e.preventDefault()
         m.request({
             method: "POST",
-            url: "http://192.168.177.83:2000/api/login",
+            url: server.url + "/auth/login",
             body: {
                 email: credential.email,
                 password: credential.password
             }
         }).then((response) => {
             if (response != undefined) {
-                if (response) {
-                    window.localStorage.setItem('jwt', JSON.stringify(response.token))
-                    loadRoutes()
-                } else
-                    credential.error = "Something went wrong"
-            } else
-                credential.error = "Cannot acces the server"
+                jwt.token = response.token
+                mountRoutes()
+            }
+        }, (error) => {
+            if (error.code == 400)
+                credential.error = "Erreur de login"
         })
         loadRoutes();
     }
 }
 module.exports = {
     view() {
-        return m("div.form-signin",
+        document.body.className = "text-center signin"
+        return m("main.form-signin",
             m("form",
                 [
                     m("h1.h3.mb-3.fw-normal",
@@ -66,35 +59,33 @@ module.exports = {
                     ),
                     m("div.form-floating",
                         [
-                            m("input.form-control.mb-3[type='email'][id='floatingInput'][placeholder='name@example.com']", {
+                            m("input.form-control[type='email'][id='emailInput'][placeholder='name@example.com']", {
                                 oninput: function(e) {
                                     credential.email = e.target.value
                                 },
                                 value: credential.email
                             }),
-                            m("label[for='floatingInput']",
-                                "Email address"
+                            m("label[for='emailInput']",
+                                "Email"
                             )
                         ]
                     ),
                     m("div.form-floating",
-                        [
-                            m("input.form-control.mb-3[type='password'][id='floatingPassword'][placeholder='Password']", {
-                                oninput: function(e) {
-                                    credential.password = e.target.value
-                                },
-                                value: credential.password
-                            }),
-                            m("label[for='floatingPassword']",
-                                "Password"
-                            )
-                        ]
+                        m("input.form-control[type='password'][id='passwordInput'][placeholder='Password']", {
+                            oninput: function(e) {
+                                credential.password = e.target.value
+                            },
+                            value: credential.password
+                        }),
+                        m("label[for='passwordInput']",
+                            "Password"
+                        )
                     ),
                     m("div.checkbox.mb-3",
                         m("label",
                             [
                                 m("input[type='checkbox'][value='remember-me']"),
-                                " Remember me "
+                                " Se souvenir de moi "
                             ]
                         )
                     ),
@@ -104,9 +95,11 @@ module.exports = {
                         }
                     }, credential.error),
                     m("button.w-100.btn.btn-lg.btn-primary[type='submit']", {
-                        disabled: !credential.canSubmit(),
-                        onclick: credential.login
-                    }, "Se connecter"),
+                            disabled: !credential.canSubmit(),
+                            onclick: credential.login
+                        },
+                        "Se connecter"
+                    ),
                     m("p.mt-5.mb-3.text-muted",
                         [
                             m.trust("&copy;"),
