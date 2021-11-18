@@ -5,18 +5,25 @@ const { create_association } = require("../services/user_table");
 const { findUserById } = require("../services/user");
 
 
-router.get(`/`, async (req, res)=>{
+router.get(`/:idAuteur`, async (req, res)=>{
 
 
     if (req.user.role.isAdmin) 
     {
-        const tables = await get_all_rows();
+        const tables = await get_all_rows(req.params.idAuteur);
 
         if(!tables)
             res.status(500).json({success: false });
     
+        const user = await findUserById(tables[0].auteur);
+
+        if (user)
+            tables.map( (row) => {
+                row.auteur = user[0].email;
+            })
+
         res.send(tables);
-    
+
     }
     else  
         res.status(400).send("You're not authorised");
@@ -44,16 +51,16 @@ router.post('/new_fonction', async (req, res) => {
         console.log(row);
 
         const result = await create_association(req.user.userId, row[0].id );
-
+        
+        console.log(result);
 
         if(!row)
             res.status(500).json({success: false});
 
         const user = await findUserById(row[0].auteur);
-        row[0].auteur = undefined;
         if (user)
 
-            row[0].createur = user[0].email;     
+            row[0].auteur = user[0].email;     
 
         console.log(row)
         res.send(row);

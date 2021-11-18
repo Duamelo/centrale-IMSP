@@ -19,7 +19,7 @@ app.use(errorHandler);
 
 
 const api = process.env.API_URL;
-const PORT = 3000;
+
 
 
 // Routers
@@ -37,15 +37,15 @@ app.use(`${api}/capteurs`, capteursRouter);
 app.use(`${api}/auth`, authRouter);
 
 
-
-app.get(`${api}/`, (req, res)=>{
-    res.send('hello world');
+app.get(`${api}/:name`, (req, res)=>{
+    res.send('hello ' + req.params.name);
 });
 
 
 
 // Server
-app.listen(PORT, () =>  {
+app.listen(process.env.PORT || 3000, () =>  {
+    console.log(process.env.PORT);
     console.log(api);
-    console.log('Server is running http://localhost:3000');
+    console.log('Server is running http://localhost:'+ process.env.PORT);
 });
