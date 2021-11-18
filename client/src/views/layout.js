@@ -1,5 +1,4 @@
 var m = require('mithril');
-
 const jwt = require('../config/jwt')
 const {
     getRoutes
@@ -16,7 +15,6 @@ function isActive(route) {
 module.exports = {
     view: function(vnode) {
         const email = jwt.token.email
-
         return [
             m("header.navbar.navbar-dark.sticky-top.bg-dark.flex-md-nowrap.p-0.shadow",
                 [

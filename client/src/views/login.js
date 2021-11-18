@@ -1,4 +1,9 @@
 var m = require("mithril");
+const server = require("../config/server");
+const jwt = require('../config/jwt')
+const {
+    mountRoutes
+} = require("../mounter");
 
 function jsonToForm(json) {
     const formData = new FormData();
@@ -45,7 +50,6 @@ const credential = {
             if (error.code == 400)
                 credential.error = "Erreur de login"
         })
-        loadRoutes();
     }
 }
 module.exports = {
@@ -71,15 +75,17 @@ module.exports = {
                         ]
                     ),
                     m("div.form-floating",
-                        m("input.form-control[type='password'][id='passwordInput'][placeholder='Password']", {
-                            oninput: function(e) {
-                                credential.password = e.target.value
-                            },
-                            value: credential.password
-                        }),
-                        m("label[for='passwordInput']",
-                            "Password"
-                        )
+                        [
+                            m("input.form-control[type='password'][id='passwordInput'][placeholder='Password']", {
+                                oninput: function(e) {
+                                    credential.password = e.target.value
+                                },
+                                value: credential.password
+                            }),
+                            m("label[for='passwordInput']",
+                                "Password"
+                            )
+                        ]
                     ),
                     m("div.checkbox.mb-3",
                         m("label",
