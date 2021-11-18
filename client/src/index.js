@@ -4,7 +4,7 @@ const {
     mountRoutes
 } = require("./mounter");
 
-if (window.localStorage['jwt'] !== undefined) {
+if (window.localStorage['jwt'] != undefined) {
     mountRoutes();
 } else {
     m.mount(document.body, login)

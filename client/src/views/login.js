@@ -1,4 +1,6 @@
 var m = require("mithril");
+const server = require("../config/server");
+const jwt = require('../config/jwt')
 const {
     mountRoutes
 } = require("../mounter");
@@ -8,7 +10,7 @@ function jsonToForm(json) {
     Object.keys(json).forEach(key => formData.append(key, json[key]));
     return formData;
 }
-credential = {
+const credential = {
     error: "",
     errorDisplay() {
         return credential.error != "" ? "" : "none"
@@ -30,24 +32,23 @@ credential = {
     set password(value) {
         this._password = value;
     },
-    login() {
-        mountRoutes()
+    login(e) {
+        e.preventDefault()
         m.request({
             method: "POST",
-            url: "http://192.168.177.83:2000/api/login",
+            url: server.url + "/auth/login",
             body: {
                 email: credential.email,
                 password: credential.password
             }
         }).then((response) => {
             if (response != undefined) {
-                if (response) {
-                    window.localStorage.setItem('jwt', JSON.stringify(response.token))
-                    window.location.href = "./"
-                } else
-                    credential.error = "Something went wrong"
-            } else
-                credential.error = "Cannot acces the server"
+                jwt.token = response.token
+                mountRoutes()
+            }
+        }, (error) => {
+            if (error.code == 400)
+                credential.error = "Erreur de login"
         })
     }
 }
