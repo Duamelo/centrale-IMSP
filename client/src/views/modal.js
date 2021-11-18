@@ -7,6 +7,7 @@ var Modal = {
         /*{
             title:"Le titre",
             saveButtonTitle:"Enregistrer",
+            style:"",
             save(){
                 //L'action a mener avec le formulaire
             },
@@ -17,17 +18,27 @@ var Modal = {
     },
     view() {
         const modal = this.modal;
-        return m("div.modal-dialog",
+        return m("div.modal-dialog", {
+                class: (modal.style != undefined ? modal.style : "")
+            },
             m("div.modal-content",
                 m("div.modal-header",
                     m("h5.modal-title", this.modal.title),
-                    m("button.btn-close[type=button][data-bs-dismiss=modal][aria-label=Close]")
+                    m("button.btn-close[type=button][data-bs-dismiss=modal][aria-label=Close]", {
+                        onclick() {
+                            var a = modal.clean == undefined ? "" : modal.clean()
+                        }
+                    })
                 ),
                 m("div.modal-body",
                     m(modal)
                 ),
                 m("div.modal-footer",
-                    m("button.btn.btn-secondary[type=button][data-bs-dismiss=modal]", "Close"),
+                    m("button.btn.btn-secondary[type=button][data-bs-dismiss=modal]", {
+                        onclick() {
+                            var a = modal.clean == undefined ? "" : modal.clean()
+                        }
+                    }, "Close"),
                     m("button.btn.btn-primary[type=button]", {
                         onclick(e) {
                             modal.save();

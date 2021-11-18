@@ -1,4 +1,5 @@
 var m = require('mithril');
+const jwt = require('../config/jwt')
 const {
     getRoutes
 } = require('../config/routes');
@@ -13,6 +14,7 @@ function isActive(route) {
 
 module.exports = {
     view: function(vnode) {
+        const email = jwt.token.email
         return [
             m("header.navbar.navbar-dark.sticky-top.bg-dark.flex-md-nowrap.p-0.shadow",
                 [
@@ -24,14 +26,35 @@ module.exports = {
                     ),
                     m("ul.navbar-nav.px-3",
                         m("li.nav-item.text-nowrap",
-                            m("a.nav-link[href='#']", {
-                                    onclick(e) {
-                                        window.localStorage.removeItem('jwt')
-                                        // m.mount(document.body, login)
-                                        window.location.reload()
-                                    }
-                                },
-                                "Sign out"
+                            m("div.dropdown",
+                                [
+                                    m("a.d-block.link-dark.text-decoration-none.dropdown-toggle[href='#'][id='dropdown'][data-bs-toggle='dropdown'][aria-expanded='false']",
+                                        email
+                                    ),
+                                    m("ul.dropdown-menu.text-small.shadow[aria-labelledby='dropdownUser2']",
+                                        [
+                                            m("li",
+                                                m("a.dropdown-item[href='#']", {
+                                                        onclick(e) {
+                                                            window.localStorage.removeItem('jwt')
+                                                            // m.mount(document.body, login)
+                                                            window.location.reload()
+                                                        }
+                                                    },
+                                                    "Se déconnecter"
+                                                )
+                                            ),
+                                            m("li",
+                                                m("hr.dropdown-divider")
+                                            ),
+                                            m("li",
+                                                m("a.dropdown-item[href='#']",
+                                                    "Paramètre"
+                                                )
+                                            )
+                                        ]
+                                    )
+                                ]
                             )
                         )
                     )
