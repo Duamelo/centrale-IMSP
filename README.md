@@ -1,7 +1,7 @@
 # centrale-meteorologique-IMSP
 
 
-<p> Une interface entièrement faire en Javascript (Mithril js)
+<p> Une interface entièrement faite en Javascript (Mithril js)
 Un framework puissant, efficace, rapide en exécution. Le server est en node js </p>
 
 ### <a href="https://mithril.js.org/"> Un tour sur mithril js </a>
