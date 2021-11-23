@@ -1,16 +1,27 @@
 var m = require("mithril");
-// var chart = require('chart.min.js')
+const jwt = require("../config/jwt")
 var mesure = require("../models/mesure.model");
+const graph = require("../components/chart")
 const {
     list
 } = require("../models/table.model");
 const {
     tabs
-} = require("./tabs");
+} = require("../components/tabs");
+const tables = require('../models/table.model')
+
+function randomColor(a) {
+    return "rgba(" + randomNumber() + "," + randomNumber() + "," + randomNumber() + "," + a + ")"
+
+
+    function randomNumber() {
+        return Math.floor(Math.random() * 255);
+    }
+}
 const form = {
     _isReady: false,
     get isReady() {
-        return this._isReady;
+        return this._isReady || mesure.mesure.data != undefined;
     },
     set isReady(value) {
         this._isReady = value;
@@ -20,7 +31,7 @@ const form = {
         return this._debut;
     },
     set debut(value) {
-        if (this.fin == "" || value < this.fin)
+        if (this.fin == "" || value <= this.fin)
             this._debut = value;
     },
     _fin: '',
@@ -28,7 +39,7 @@ const form = {
         return this._fin;
     },
     set fin(value) {
-        if (value > this.debut)
+        if (value >= this.debut)
             this._fin = value;
     },
     _id_tableau: 0,
@@ -42,11 +53,9 @@ const form = {
     canSubmit() {
         return this.debut != '' && this.fin != ''
     },
-    init() {
-        form.tables = list
-    },
     oninit() {
-        form.init()
+        if (tables.list.length == 0)
+            tables.getTables(jwt.token.userId)
     },
     view(vnode) {
         return m("form.mt-5.row",
@@ -56,9 +65,9 @@ const form = {
                     onchange(e) {
                         form.id_tableau = this.value
                     }
-                }, form.tables.map((value) => {
+                }, tables.list.map((value, index) => {
                     return m("option", {
-                            value: value.id
+                            value: index
                         },
                         value.nom)
                 }))
@@ -84,12 +93,7 @@ const form = {
                 disabled: !form.canSubmit(),
                 onclick(e) {
                     e.preventDefault()
-                    form.isReady = true
-                    console.log({
-                        Debut: form.debut,
-                        Fin: form.fin,
-                        table: form.id_tableau
-                    })
+                    form.isReady = mesure.mesure.loadData(tables.list[form.id_tableau], form.debut, form.fin)
                 }
             }, "Ok")
         )
@@ -115,53 +119,20 @@ const table = {
     }
 }
 
-const graph = {
-    view(vnode) {
-        const table = vnode.attrs.table
-        return m('canvas', {
-            oncreate(vnode) {
-                const plot = mesure.mesure.GetData(table)
-                // new Chart(vnode.dom, {
-                //     type: 'line',
-                //     labels: plot.datas['Ux'],
-                //     datasets: [{
-                //         label: 'Ux',
-                //         data: plot.labels,
-                //         fill: false
-                //     }]
-
-                // })
-                // Object.keys(plot.datas).forEach(capteur => {
-                //     new Chart(vnode.dom, {
-                //         type: 'line',
-                //         labels: plot.datas[capteur],
-                //         datasets: [{
-                //             label: capteur,
-                //             data: plot.labels,
-                //             fill: false
-                //         }]
-
-                //     })
-                // });
-            }
-        }, m('h1', 'Graph'))
-    }
-}
 module.exports = {
     oninit() {
+        const size = 10
         tabs.addTab({
             name: "Tableau",
             view() {
-                return (form.isReady ? m(table, {
-                    table: form.tables[form.id_tableau]
-                }) : m("H2", "Rien à affiche"))
+                return (form.isReady ? m(tableView) : m("H2", "Rien à affiche"))
             }
         })
         tabs.addTab({
             name: "Graphe",
             view() {
-                return (form.isReady ? m(graph, {
-                    table: form.tables[form.id_tableau]
+                return (form.isReady ? m(graphView, {
+                    max: mesure.mesure.data.tt.length
                 }) : m("H2", "Rien à affiche"))
             }
         })
@@ -179,6 +150,61 @@ module.exports = {
     },
     onremove() {
         tabs.clear()
+    }
+}
+const tableView = {
+    view() {
+        return m(table, {
+            table: tables.list[form.id_tableau]
+        })
+    }
+}
+const graphView = {
+    types: ["line", "radar"],
+    type: 0,
+    size: 0,
+    max: 0,
+    oninit(vnode) {
+        this.max = vnode.attrs.max
+        this.size = this.max = vnode.attrs.max
+    },
+    view() {
+        return [
+            m("form.mt-5.row",
+                m("div.mt-1.form-group.col-md-3", [
+                    m("select.form-select][placeholder='Type de graphe']", {
+                        onchange: (e) => {
+                            this.type = this.value
+                        }
+                    }, this.types.map((value, index) => {
+                        return m("option", {
+                                value: index
+                            },
+                            value)
+                    }))
+                ]), m("div.form-group.col-md-3", [
+                    m("input.form-control[type='number'][placeholder='Debut']", {
+                        max: this.max,
+                        value: this.size,
+                        oninput: (e) => {
+                            this.size = e.target.value
+                        }
+                    })
+                ])),
+            m(graph, {
+                type: "line", //this.types[this.type],
+                labels: mesure.mesure.data.tt, //.slice(0, this.size),
+                datas: Object.keys(mesure.mesure.data).filter((value) => value != "tt").map((variable) => {
+                    return {
+                        label: variable,
+                        data: mesure.mesure.data[variable], //.slice(0, this.size),
+                        fill: true,
+                        bgColor: randomColor(0.2),
+                        borderColor: randomColor(1)
+                    };
+                })
+            })
+        ];
     }
 }
 // (form.isReady ?

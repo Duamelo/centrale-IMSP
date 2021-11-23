@@ -14,7 +14,7 @@ function isActive(route) {
 
 module.exports = {
     view: function(vnode) {
-        const email = jwt.token.email
+        const email = "Email" //jwt.token.email
         return [
             m("header.navbar.navbar-dark.sticky-top.bg-dark.flex-md-nowrap.p-0.shadow",
                 [
