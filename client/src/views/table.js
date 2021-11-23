@@ -2,7 +2,7 @@ const m = require("mithril");
 const table = require('../models/table.model');
 const {
     Modal
-} = require("./modal");
+} = require("../components/modal");
 
 const jwt = require("../config/jwt")
 var nbAccordion = 0;

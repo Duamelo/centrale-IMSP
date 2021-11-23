@@ -1,6 +1,6 @@
 var m = require("mithril")
 const server = require("../config/server")
-var table = {
+const table = {
     error: "",
     displayErrror() {
         return this.error != ""
@@ -36,7 +36,6 @@ var table = {
 
     },
     getTables(id) {
-        console.log(id);
         m.request({
             headers: {
                 Authorization: "Bearer " + window.localStorage.jwt
@@ -50,6 +49,7 @@ var table = {
         }, (error) => {
             table.error = error.response.message
         })
+        return table.list
     },
     list: []
     // list: [{
