@@ -2,7 +2,7 @@ var m = require("mithril")
 var capteur = require('../models/capteur.model');
 const {
     Modal
-} = require("./modal");
+} = require("../components/modal");
 var nbAccordion = 0;
 const AjouterUneVariable = {
     _unite: "",

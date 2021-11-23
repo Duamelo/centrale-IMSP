@@ -1,21 +1,37 @@
+var m = require("mithril");
+const server = require("../config/server");
 exports.mesure = {
     GetTableList(id) {
         return this.list
     },
-    GetData(table) {
-        const values = this.list
-        var labels = values.map((record) => {
-            return record.recordtime
+    loadData(table, debut, fin) {
+        var data;
+        m.request({
+            headers: {
+                Authorization: "Bearer " + window.localStorage.jwt
+            },
+            url: server.url + "/mesures/:table/:start/:fin",
+            params: {
+                table: table.nom,
+                start: debut,
+                fin: fin
+            }
+        }).then((result) => {
+            data = result
+            this.list = result
+            this.data = this.GetData(table, data)
+        }, (error) => {
+            console.log("Something went wrong", error)
         })
-        var datas = Array.from(table["var-fonc-per"], (variable) => {
-            var result = {}
-            result[variable.vare] = values.map((values) => values[variable.vare])
-            return result
-        })
-        return {
-            labels,
-            datas
-        }
+    },
+    data: undefined,
+    GetData(table, data) {
+        const keys = Object.keys(data[0])
+        const result = {}
+        keys.forEach(key => {
+            result[key] = data.map((value) => value[key])
+        });
+        return result;
     },
     list: [{
             "recordtime": "2021-01-14 14:30:00",
