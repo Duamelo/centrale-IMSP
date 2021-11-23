@@ -46,7 +46,7 @@ router.post('/new_fonction', async (req, res) => {
             periode: "5s"
         };
         
-        const row = await create(req.user.userId, req.body.nom, req.body.sortie, req.body.fonction, req.body.periode);
+        const row = await create(req.user.userId, req.body.nom, req.body.description,  req.body.sortie, req.body.fonction, req.body.periode);
 
         console.log(row);
 

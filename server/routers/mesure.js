@@ -8,7 +8,7 @@ const { get_all_mesures,
 const { get_one_table
 } = require("../services/table");
 
-
+/*
 router.get(`/`, async (req, res)=>{
     const mesures = await get_all_mesures();
 
@@ -18,13 +18,17 @@ router.get(`/`, async (req, res)=>{
     res.send(mesures);
 })
 
+*/
 
 
-router.get('/:nom_table/:start/:end', async(req, res) => {
+router.get('/:table/:start_date/:end_date', async(req, res) => {
 
+//    const { table, start_date, end_date } = req.params;
+
+    console.log(req.params);
     var query;
     
-    const data = await get_one_table(req.params.nom_table);
+    const data = await get_one_table(req.params.table, req.params.start_date, req.params.end_date);
 
     console.log(data);
     query = "with new_table as (select recordtime," +
@@ -34,10 +38,10 @@ router.get('/:nom_table/:start/:end', async(req, res) => {
                 return "(select valeur from mesures m1 where m1.id_sortie=" + item.id + " and m1.recordtime=m.recordtime limit 1) \
                 as id"+item.id
             }).join(",") +
-             " from mesures m) select ts_round(recordtime, " + data[0].periode + ") as tt,"  +
+             " from mesures m) select ts_round(recordtime, " + 300 + ") as tt,"  +
     data.map((item)=>{
                  return item.fonction+"(id"+ item.id +") as " + item.fonction+"_"+item.nom_sortie 
-             }).join(',') + " from new_table where recordtime between '" + req.params.start + "' and '" + req.params.end + "' group by tt"
+             }).join(',') + " from new_table where recordtime between '" + req.params.start_date + "' and '" + req.params.end_date + "' group by tt"
     
     console.log(query);
    

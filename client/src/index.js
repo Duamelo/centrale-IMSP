@@ -8,9 +8,5 @@ if (window.localStorage['jwt'] != undefined) {
     mountRoutes();
 } else {
     m.mount(document.body, login)
-    //     {
-    //     view: function() {
-    //         return m(login)
-    //     }
-    // })
+      
 }
