@@ -3,7 +3,7 @@ const jwt = require('../config/jwt')
 const {
     getRoutes
 } = require('../config/routes');
-
+import jwt_decode from "jwt-decode";
 // var login = require("./login")
 
 
@@ -12,7 +12,22 @@ function isActive(route) {
     return route === current
 }
 
+var  role; 
+
+var jeton ;
+
 module.exports = {
+   oninit: ()=>{ 
+        jeton = jwt_decode(window.localStorage['jwt']);
+        role = jeton.role.isAdmin ? "admin" : "user"; 
+    },
+
+    oncreate: ()=> {
+        if( role == "admin")
+          m.route.set("/tables")
+        else
+          m.route.set("/mesures")
+    },
     view: function(vnode) {
         const email = "Email" //jwt.token.email
         return [
@@ -66,11 +81,18 @@ module.exports = {
                         m("div.position-sticky.pt-3",
                             [
                                 m('H3.nav-item', ""),
-                                m("ul.nav.flex-column", getRoutes("admin").map((route) => {
+                                m("ul.nav.flex-column", getRoutes().map((route) => {
+                                    var disabled;
+                                    console.log(role +"  " +  route.link )
+                                    if(role == "admin" || (role != "admin" && route.link == "/mesures"))
+                                        disabled = false;
+                                    else
+                                        disabled = true;
                                         return m("li.nav-item",
                                             m(m.route.Link, {
                                                     class: "nav-link " + (isActive(route.link) ? "active" : ""),
-                                                    href: route.link
+                                                    href: route.link,
+                                                    disabled: disabled
                                                 },
                                                 route.title
                                             )

@@ -7,11 +7,11 @@ var mesure = require("./views/mesure");
 function mountRoutes() {
     document.body.className = "";
     const role = "admin";
-    if (role == "admin")
+    //if (role == "admin")
         m.route(document.body, "/", {
             "/": {
                 render: function() {
-                    return m(layout, m("h3", "Bienvenue sur l'interface administrateur"));
+                    return m(layout);
                 }
             },
             "/capteurs": {
@@ -31,7 +31,7 @@ function mountRoutes() {
             }
         });
 
-    else
+   /* else
         m.route(document.body, "/", {
             "/": {
                 render: function() {
@@ -43,6 +43,6 @@ function mountRoutes() {
                     return m(layout, m(mesure));
                 }
             }
-        });
+        });*/
 }
 exports.mountRoutes = mountRoutes;

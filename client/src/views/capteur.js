@@ -215,89 +215,6 @@ module.exports = {
                 }, "+"), ], "Liste des capteurs"),
                 capteur.list.map(function(t) {
                     nbAccordion++;
-                    if (nbAccordion == 1) {
-                        return m("div", {
-                                "class": "accordion-item"
-                            },
-                            [
-                                m("h2", {
-                                        "class": "accordion-header",
-                                        "id": "panelsStayOpen-heading" + nbAccordion
-                                    },
-                                    m("button", {
-                                            "class": "accordion-button collapsed",
-                                            "type": "button",
-                                            "data-bs-toggle": "collapse",
-                                            "data-bs-target": "#panelsStayOpen-collapse" + nbAccordion,
-                                            "aria-expanded": "false",
-                                            "aria-controls": "panelsStayOpen-collapse" + nbAccordion
-                                        },
-                                        t.nom
-                                    )
-                                ),
-                                m("div", {
-                                        "class": "accordion-collapse collapse",
-                                        "id": "panelsStayOpen-collapse" + nbAccordion,
-                                        "aria-labelledby": "panelsStayOpen-heading" + nbAccordion
-                                    },
-                                    m("div", {
-                                            "class": "accordion-body"
-                                        },
-                                        m(".contenu", [
-                                                m("h4[class=disc]", "DESCRIPTION "),
-                                                m("em", " " + t.description),
-                                                m("h4[class=disc]", "Variables"),
-                                                m("table.table.table-bordered",
-                                                    [
-                                                        m("thead",
-                                                            m("tr",
-                                                                [
-                                                                    m("th[scope='col']",
-                                                                        "#"
-                                                                    ),
-                                                                    m("th[scope='col']",
-                                                                        "Unité"
-                                                                    ),
-                                                                    m("th[scope='col']",
-                                                                        "Valeur Minimale"
-                                                                    ),
-                                                                    m("th[scope='col']",
-                                                                        "valeur Maximanle"
-                                                                    )
-                                                                ]
-                                                            )
-                                                        ),
-                                                        m("tbody", t.variables.map(function(variable) {
-                                                            return m("tr",
-                                                                [
-                                                                    m("th[scope='col']",
-                                                                        variable.sortie
-                                                                    ),
-                                                                    m("td[scope='col']",
-                                                                        variable.unite
-                                                                    ),
-                                                                    m("td[scope='col']",
-                                                                        variable.valeur_min
-                                                                    ),
-                                                                    m("td[scope='col']",
-                                                                        variable.valeur_max
-                                                                    )
-                                                                ]
-                                                            )
-                                                        }))
-                                                    ]),
-
-                                            ]
-
-
-                                        )
-                                    )
-
-                                )
-                            ]
-
-                        );
-                    } else {
                         return m("div", {
                                 "class": "accordion-item"
                             },
@@ -327,7 +244,7 @@ module.exports = {
                                         },
                                         m(".contenu",
                                             [
-                                                m("h4[class=disc]", "DESCRIPTION "),
+                                                m("h4.[class=disc]", "Description "),
                                                 m("em", " " + t.description),
                                                 m("h4[class=disc]", "Sorties"),
                                                 m("table.table.table-bordered",
@@ -345,7 +262,7 @@ module.exports = {
                                                                         "Valeur Minimale"
                                                                     ),
                                                                     m("th[scope='col']",
-                                                                        "valeur Maximanle"
+                                                                        "valeur Maximale"
                                                                     )
                                                                 ]
                                                             )
@@ -376,7 +293,7 @@ module.exports = {
                                 )
                             ]
                         );
-                    }
+                   // }
 
 
                 })

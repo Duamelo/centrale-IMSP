@@ -1,5 +1,5 @@
-export function getRoutes(role) {
-    if (role === "admin")
+export function getRoutes() {
+  //  if (role === "admin")
         return [{
             link: "/capteurs",
             title: "Capteurs"
@@ -10,9 +10,9 @@ export function getRoutes(role) {
             link: "/mesures",
             title: "Mesures"
         }]
-    else
+    /*else
         return [{
             link: "/mesures",
             title: "Mesures"
-        }]
+        }]*/
 }
