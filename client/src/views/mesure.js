@@ -125,7 +125,11 @@ module.exports = {
         tabs.addTab({
             name: "Tableau",
             view() {
-                return (form.isReady ? m(tableView) : m("H2", "Rien à affiche"))
+                return (form.isReady ? m(tableView) :
+                    m("img", {
+                        alt: "Rien à affiche",
+                        src: "asset/images/tableau.png"
+                    }))
             }
         })
         tabs.addTab({
@@ -133,7 +137,10 @@ module.exports = {
             view() {
                 return (form.isReady ? m(graphView, {
                     max: mesure.mesure.data.tt.length
-                }) : m("H2", "Rien à affiche"))
+                }) : m("img", {
+                    alt: "Rien à affiche",
+                    src: "asset/images/graphe.png"
+                }))
             }
         })
     },
@@ -161,7 +168,6 @@ const tableView = {
 }
 const graphView = {
     types: ["line", "radar"],
-    type: 0,
     size: 0,
     max: 0,
     oninit(vnode) {
@@ -174,7 +180,7 @@ const graphView = {
                 m("div.mt-1.form-group.col-md-3", [
                     m("select.form-select][placeholder='Type de graphe']", {
                         onchange: (e) => {
-                            this.type = this.value
+                            graph.changeChartType(this.types[this.value])
                         }
                     }, this.types.map((value, index) => {
                         return m("option", {
