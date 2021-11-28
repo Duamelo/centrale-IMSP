@@ -25,7 +25,7 @@ var Modal = {
                 m("div.modal-header",
                     m("h5.modal-title", this.modal.title),
                     m("button.btn-close[type=button][data-bs-dismiss=modal][aria-label=Close]", {
-                        onclick() {
+                        onclick: () => {
                             var a = modal.clean == undefined ? "" : modal.clean()
                         }
                     })
@@ -35,12 +35,12 @@ var Modal = {
                 ),
                 m("div.modal-footer",
                     m("button.btn.btn-secondary[type=button][data-bs-dismiss=modal]", {
-                        onclick() {
+                        onclick: () => {
                             var a = modal.clean == undefined ? "" : modal.clean()
                         }
                     }, "Close"),
                     m("button.btn.btn-primary[type=button]", {
-                        onclick(e) {
+                        onclick: (e) => {
                             modal.save();
                         }
                     }, modal.saveButtonTitle)

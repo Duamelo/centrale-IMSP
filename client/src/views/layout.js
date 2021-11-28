@@ -12,21 +12,21 @@ function isActive(route) {
     return route === current
 }
 
-var  role; 
+var role;
 
-var jeton ;
+var jeton;
 
 module.exports = {
-   oninit: ()=>{ 
+    oninit: () => {
         jeton = jwt_decode(window.localStorage['jwt']);
-        role = jeton.role.isAdmin ? "admin" : "user"; 
+        role = jeton.role.isAdmin ? "admin" : "user";
     },
 
-    oncreate: ()=> {
-        if( role == "admin")
-          m.route.set("/tables")
+    oncreate: () => {
+        if (role == "admin")
+            m.route.set("/tables")
         else
-          m.route.set("/mesures")
+            m.route.set("/mesures")
     },
     view: function(vnode) {
         const email = "Email" //jwt.token.email
@@ -43,7 +43,7 @@ module.exports = {
                         m("li.nav-item.text-nowrap",
                             m("div.dropdown",
                                 [
-                                    m("a.d-block.link-dark.text-decoration-none.dropdown-toggle[href='#'][id='dropdown'][data-bs-toggle='dropdown'][aria-expanded='false']",
+                                    m("a.d-block.link-light.text-decoration-none.dropdown-toggle[href='#'][id='dropdown'][data-bs-toggle='dropdown'][aria-expanded='false']",
                                         email
                                     ),
                                     m("ul.dropdown-menu.text-small.shadow[aria-labelledby='dropdownUser2']",
@@ -82,12 +82,12 @@ module.exports = {
                             [
                                 m('H3.nav-item', ""),
                                 m("ul.nav.flex-column", getRoutes().map((route) => {
-                                    var disabled;
-                                    console.log(role +"  " +  route.link )
-                                    if(role == "admin" || (role != "admin" && route.link == "/mesures"))
-                                        disabled = false;
-                                    else
-                                        disabled = true;
+                                        var disabled;
+                                        console.log(role + "  " + route.link)
+                                        if (role == "admin" || (role != "admin" && route.link == "/mesures"))
+                                            disabled = false;
+                                        else
+                                            disabled = true;
                                         return m("li.nav-item",
                                             m(m.route.Link, {
                                                     class: "nav-link " + (isActive(route.link) ? "active" : ""),
