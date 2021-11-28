@@ -6,16 +6,15 @@ const table = {
         return this.error != ""
     },
     addTable(table) {
-        this.list.push({
+        var newTable = {
             id: this.list.length,
-            nom: table.table,
+            nom: table.nom,
             description: table.description,
-            periode: table.periode,
-            "var-fonc-per": [{
-                vare: table.variable,
-                fonc: table.fonction
-            }]
-        })
+            periode: 0,
+            "var-fonc-per": []
+        }
+        newTable.ajouterVariable = table.AjouterVariable(newTable)
+        this.list.push(newTable)
     },
     addVariableToTable(table, variable) {
         table["var-fonc-per"].push({
@@ -23,7 +22,8 @@ const table = {
             fonc: variable.fonction
         })
     },
-    removeVariableFromTable(table, variable) {
+    removeVariableFromTable(table, index) {
+        table["var-fonc-per"].splice(index, 1)
 
     },
     changeVariableFromTable(table, variable) {

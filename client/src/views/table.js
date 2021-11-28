@@ -3,118 +3,66 @@ const table = require('../models/table.model');
 const {
     Modal
 } = require("../components/modal");
-
+const timelength = require('../components/timelength')
 const jwt = require("../config/jwt")
 var nbAccordion = 0;
 var fonc = ["moyenne", "ecart-type", "max", "min"];
 
 
-const AjouterVariable = {
-    table: null,
-    title: "",
-    saveButtonTitle: "Ajouter",
-    save() {
-        const variable = {
-            id: this.table.id,
-            nom: this.nom,
-            fonction: fonc[this.fonction]
-        }
-        table.addVariableToTable(this.table, variable)
-    },
-    _nom: "",
-    get nom() {
-        return this._nom;
-    },
-    set nom(value) {
-        this._nom = value;
-    },
-    _fonction: 0,
-    get fonction() {
-        return this._fonction;
-    },
-    set fonction(value) {
-        this._fonction = value;
-    },
-    init(table) {
-        if (table) {
-            this.table = table
-            this.title = "Ajouter une variable à " + table.nom
-            this.nom = ""
-            this.fonction = 0
-        }
-    },
-    view() {
-        return [m("div.mb-3",
-                m("label[for=formControlInput1].form-label", "Nom de la variable"),
-                m("input[type=text].form-control#formControlInput1[placeholder=Tsonic]", {
-                    value: AjouterVariable.nom,
-                    oninput(e) {
-                        AjouterVariable.nom = e.target.value
+function AjouterVariable(curentTable) {
+    return {
+        table: curentTable,
+        nom: "",
+        fonction: 0,
+        add() {
+            const variable = {
+                id: this.table.id,
+                nom: this.nom,
+                fonction: fonc[this.fonction]
+            }
+            table.addVariableToTable(this.table, variable)
+        },
+        view() {
+            return m('tr', [
+                m("td"),
+                m("td",
+                    m("input[type=text].form-control#formControlInput1[placeholder=Tsonic]", {
+                        value: this.nom,
+                        oninput: (e) => {
+                            this.nom = e.target.value
+                        }
+                    })
+                ),
+                m("td",
+                    m("select.form-select", {
+                        onchange: (e) => {
+                            this.fonction = e.target.value
+                        }
+                    }, fonc.map((fn, index) => {
+                        return m("option", {
+                            value: index
+                        }, fn);
+                    }))),
+                m("td", m("button.bordure.btn.btn-outline-dark[type=button]", {
+                    onclick: (e) => {
+                        this.add()
                     }
-                })
-            ),
-            m("div.mb-3",
-                m("label[for=formControlInput2].form-label", "Fonction"),
-                m("select.form-select[aria-label=Default select exemple]", {
-                    onchange(e) {
-                        AjouterVariable.fonction = this.value
-                    }
-                }, fonc.map((fn, index) => {
-                    return m("option", {
-                        value: index
-                    }, fn);
-                }))
-            )
-        ]
+                }, "+"))
+            ])
+        }
     }
-
 }
 
 const AjouterUneTable = {
     title: "Ajouter une table",
     saveButtonTitle: "Ajouter",
-    _nomTable: "",
-    get nomTable() {
-        return this._nomTable;
-    },
-    set nomTable(value) {
-        this._nomTable = value;
-    },
-    _nomVariable: "",
-    get nomVariable() {
-        return this._nomVariable;
-    },
-    set nomVariable(value) {
-        this._nomVariable = value;
-    },
-    _fonction: 0,
-    get fonction() {
-        return this._fonction;
-    },
-    set fonction(value) {
-        this._fonction = value;
-    },
-    _periode: 0,
-    get periode() {
-        return this._periode;
-    },
-    set periode(value) {
-        this._periode = value;
-    },
-    _description: "",
-    get description() {
-        return this._description;
-    },
-    set description(value) {
-        this._description = value;
-    },
+    nomTable: "",
+    description: "",
     save() {
         table.addTable({
-            table: this.nomTable,
-            variable: this.nomVariable,
-            fonction: fonc[this.fonction],
-            description: this.description,
-            periode: this.periode
+            nom: AjouterUneTable.nomTable,
+            description: AjouterUneTable.description,
+            AjouterVariable: AjouterVariable
         })
     },
     view() {
@@ -123,7 +71,7 @@ const AjouterUneTable = {
                 m("label[for=formControlInput1].form-label", "Nom de la Table"),
                 m("input[type=text].form-control[placeholder=Table]", {
                     value: AjouterUneTable.nomTable,
-                    oninput(e) {
+                    oninput: (e) => {
                         AjouterUneTable.nomTable = e.target.value
                     }
                 })
@@ -131,37 +79,8 @@ const AjouterUneTable = {
                 m("label[for=formControlInput1].form-label", "Description"),
                 m("input[type=text].form-control[placeholder=description]", {
                     value: AjouterUneTable.description,
-                    oninput(e) {
+                    oninput: (e) => {
                         AjouterUneTable.description = e.target.value
-                    }
-                })
-            ), m("div.mb-3",
-                m("label[for=formControlInput1].form-label", "Nom de la variable"),
-                m("input[type=text].form-control#formControlInput1[placeholder=Tsonic]", {
-                    value: AjouterUneTable.nomVariable,
-                    oninput(e) {
-                        AjouterUneTable.nomVariable = e.target.value
-                    }
-                })
-            ),
-            m("div.mb-3",
-                m("label[for=formControlInput2].form-label", "Fonction"),
-                m("select.form-select[aria-label=Default select exemple]", {
-                    onchange(e) {
-                        AjouterUneTable.fonction = this.value
-                    }
-                }, fonc.map((fn, index) => {
-                    return m("option", {
-                        value: index
-                    }, fn);
-                }))
-            ),
-            m("div.mb-3",
-                m("label[for=formControlInput1].form-label", "Période"),
-                m("input[type=number].form-control#formControlInput1[placeholder=60 secondes]", {
-                    value: AjouterUneTable.periode,
-                    oninput(e) {
-                        AjouterUneTable.periode = e.target.value
                     }
                 })
             )
@@ -171,6 +90,9 @@ const AjouterUneTable = {
 module.exports = {
     oninit() {
         table.getTables(jwt.token.userId)
+        table.list.forEach(element => {
+            element["ajouterVariable"] = AjouterVariable(element)
+        });
     },
     view: function(vnode) {
         var modal;
@@ -201,15 +123,9 @@ module.exports = {
                     }
                 }, "+")], "Liste des tables"),
                 table.list.map(function(t) {
-
                     nbAccordion++;
-
-                    return m("div", {
-                            "class": "accordion-item"
-                        },
-                        [
-                            m("h2", {
-                                    "class": "accordion-header",
+                    return m("div.accordion-item", [
+                            m("h2.accordion-header", {
                                     "id": "panelsStayOpen-heading" + nbAccordion
                                 },
                                 m("button", {
@@ -233,39 +149,41 @@ module.exports = {
                                 }, [
                                     // insérer un bouton de création d'une ligne de la table et un bouton pour annuler 
 
-                                    m("h3", [m("button.bordure.btn.btn-outline-dark[type=button][data-bs-target=#modal][data-bs-toggle=modal]", {
-                                        style: {
-                                            float: "right"
-                                        },
-                                        onclick(e) {
-                                            modal = document.getElementById("modal")
-                                            AjouterVariable.init(t)
-                                            m.mount(modal, {
-                                                view: function() {
-                                                    return m(Modal, AjouterVariable)
-                                                }
-                                            })
-                                        }
-                                    }, "+")], [t.description, m('br'), "Période: " + t.periode + " sec"]),
+                                    m("h3", [
+                                        t.description, m('br'),
+                                        "Période: ", m("input.col-2[type=number][min=0]", {
+                                            value: t.periode,
+                                            onchange: (e) => {
+                                                t.periode = e.target.value
+                                            }
+                                        }), " sec"
+                                    ]),
                                     m(".contenu", [
                                             m("table.table",
                                                 m("thead",
                                                     m("tr",
+                                                        m("th[scope=col"),
                                                         m("th[scope=col", "Variable"),
-                                                        m("th[scope=col]", "Fonction")
+                                                        m("th[scope=col]", "Fonction"),
+                                                        m("th[scope=col")
                                                     )
                                                 ),
                                                 m("tbody",
-                                                    t["var-fonc-per"].map(function(vf) {
+                                                    t["var-fonc-per"].map(function(vf, index) {
                                                         return m("tr",
+                                                            m("td", m("button.bordure.btn.btn-outline-danger[type=button]", {
+                                                                onclick: (e) => {
+                                                                    table.removeVariableFromTable(t, index)
+                                                                }
+                                                            }, "X")),
                                                             m("td", vf.vare),
-                                                            m("td", vf.fonc)
+                                                            m("td", vf.fonc),
+                                                            m("td")
                                                         )
-                                                    })
+                                                    }), (m(t.ajouterVariable))
                                                 )
                                             )
                                         ]
-
 
                                     )
 
