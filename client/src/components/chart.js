@@ -1,24 +1,15 @@
-const m = require('mithril')
-import Chart from 'chart.js'
+const m = require('mithril');
+import Chart from 'chart.js';
+
+
 const chart = {
-    /*{
-        type: "",//[line,radar]
-        labels: []//Valeurs des abscices
-        datas: [{
-            label: "",//Nom de la courbe
-            data: "",//Valeurs des ordonnes
-            fill: true ,//a remplir ?
-            bgColor: 'rgba(255, 99, 132, 0.2)',//Si a remplir couleur du fond
-            borderColor: 'rgb(255, 99, 132)'//couleur de la courbe
-        }
-    */
     type: "",
     labels: [],
     datasets: [],
     canvas: undefined,
     graph: undefined,
     changeChartType(type) {
-        this.graph.type = type
+        this.graph.type = type;
     },
     convert(dataset) {
         return {

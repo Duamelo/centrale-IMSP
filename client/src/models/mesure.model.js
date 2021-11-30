@@ -33,25 +33,5 @@ exports.mesure = {
         });
         return result;
     },
-    list: [{
-            "recordtime": "2021-01-14 14:30:00",
-            "Ux": 2,
-            "Uy": 3,
-            "Uz": 1
-
-        },
-        {
-            "recordtime": "2021-01-14 14:30:00",
-            "Ux": 3,
-            "Uy": 3,
-            "Uz": 1
-
-        }, {
-            "recordtime": "2021-01-14 14:30:00",
-            "Ux": 7,
-            "Uy": 3,
-            "Uz": 1
-
-        }
-    ]
+    list: []
 }

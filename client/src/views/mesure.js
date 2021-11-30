@@ -58,7 +58,9 @@ const form = {
             tables.getTables(jwt.token.userId)
     },
     view(vnode) {
-        return m("form.mt-5.row",
+        return [
+            m("h4.mt-5", "Consultez les mesures de vos tables"),
+            m("form.mt-5.mb-5.row",
             m("div.mt-1.form-group.col-md-3", [
                 // m('label', 'Tableau'),
                 m("select.form-select][placeholder='Nom de la table']", {
@@ -95,8 +97,9 @@ const form = {
                     e.preventDefault()
                     form.isReady = mesure.mesure.loadData(tables.list[form.id_tableau], form.debut, form.fin)
                 }
-            }, "Ok")
+            }, "consulter")
         )
+        ]
 
     }
 }
@@ -126,9 +129,9 @@ module.exports = {
             name: "Tableau",
             view() {
                 return (form.isReady ? m(tableView) :
-                    m("img", {
+                    m("img.tableau", {
                         alt: "Rien à affiche",
-                        src: "asset/images/tableau.png"
+                        src: "assets/img/tableau.png"
                     }))
             }
         })
@@ -136,10 +139,10 @@ module.exports = {
             name: "Graphe",
             view() {
                 return (form.isReady ? m(graphView, {
-                    max: mesure.mesure.data.tt.length
-                }) : m("img", {
+                    max: mesure.mesure.data.temps.length
+                }) : m("img.graphe", {
                     alt: "Rien à affiche",
-                    src: "asset/images/graphe.png"
+                    src: "assets/img/graphe.png"
                 }))
             }
         })
@@ -199,8 +202,8 @@ const graphView = {
                 ])),
             m(graph, {
                 type: "line", //this.types[this.type],
-                labels: mesure.mesure.data.tt, //.slice(0, this.size),
-                datas: Object.keys(mesure.mesure.data).filter((value) => value != "tt").map((variable) => {
+                labels: mesure.mesure.data.temps, //.slice(0, this.size),
+                datas: Object.keys(mesure.mesure.data).filter((value) => value != "temps").map((variable) => {
                     return {
                         label: variable,
                         data: mesure.mesure.data[variable], //.slice(0, this.size),

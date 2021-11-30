@@ -1,12 +1,12 @@
 const m = require("mithril");
 const table = require('../models/table.model');
-const {
-    Modal
-} = require("../components/modal");
+const { Modal } = require("../components/modal");
 const timelength = require('../components/timelength')
 const jwt = require("../config/jwt")
+
 var nbAccordion = 0;
-var fonc = ["moyenne", "ecart-type", "max", "min"];
+
+var fonc = ["avg", "std", "max", "min"];
 
 
 function AjouterVariable(curentTable) {
@@ -20,7 +20,7 @@ function AjouterVariable(curentTable) {
                 nom: this.nom,
                 fonction: fonc[this.fonction]
             }
-            table.addVariableToTable(this.table, variable)
+            table.addVariableToTable(this.table, variable);
         },
         view() {
             return m('tr', [
@@ -29,7 +29,7 @@ function AjouterVariable(curentTable) {
                     m("input[type=text].form-control#formControlInput1[placeholder=Tsonic]", {
                         value: this.nom,
                         oninput: (e) => {
-                            this.nom = e.target.value
+                            this.nom = e.target.value;
                         }
                     })
                 ),
@@ -45,13 +45,14 @@ function AjouterVariable(curentTable) {
                     }))),
                 m("td", m("button.bordure.btn.btn-outline-dark[type=button]", {
                     onclick: (e) => {
-                        this.add()
+                        this.add();
                     }
                 }, "+"))
             ])
         }
     }
 }
+
 
 const AjouterUneTable = {
     title: "Ajouter une table",
@@ -87,6 +88,8 @@ const AjouterUneTable = {
         ]
     }
 }
+
+
 module.exports = {
     oninit() {
         table.getTables(jwt.token.userId)
@@ -125,7 +128,7 @@ module.exports = {
                 table.list.map(function(t) {
                     nbAccordion++;
                     return m("div.accordion-item", [
-                            m("h2.accordion-header", {
+                            m("h5.accordion-header", {
                                     "id": "panelsStayOpen-heading" + nbAccordion
                                 },
                                 m("button", {
@@ -149,16 +152,19 @@ module.exports = {
                                 }, [
                                     // insérer un bouton de création d'une ligne de la table et un bouton pour annuler 
 
-                                    m("h3", [
-                                        t.description, m('br'),
-                                        "Période: ", m("input.col-2[type=number][min=0]", {
+                                    m("p.mr-3", [
+                                        m("h6.[class=disc]", "Description "),
+                                            m("p", " " + t.description),
+                                        "période (seconde): ", m("input.periode.col-2[type=number][min=0]", {
                                             value: t.periode,
                                             onchange: (e) => {
                                                 t.periode = e.target.value
                                             }
-                                        }), " sec"
+                                        }),
                                     ]),
-                                    m(".contenu", [
+                                    m(".contenu.container-fluid", [
+
+                                        m(t.ajouterVariable),
                                             m("table.table",
                                                 m("thead",
                                                     m("tr",
@@ -171,16 +177,16 @@ module.exports = {
                                                 m("tbody",
                                                     t["var-fonc-per"].map(function(vf, index) {
                                                         return m("tr",
-                                                            m("td", m("button.bordure.btn.btn-outline-danger[type=button]", {
+                                                            m("td", m("button.btn-trash.bordure.btn.btn-outline-danger[type=button]", {
                                                                 onclick: (e) => {
                                                                     table.removeVariableFromTable(t, index)
                                                                 }
-                                                            }, "X")),
+                                                            }, m('img.trash', {'src' : 'assets/img/trash.png'}))),
                                                             m("td", vf.vare),
                                                             m("td", vf.fonc),
                                                             m("td")
                                                         )
-                                                    }), (m(t.ajouterVariable))
+                                                    })
                                                 )
                                             )
                                         ]

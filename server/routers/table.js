@@ -3,7 +3,7 @@ const router = express.Router();
 const { create, get_all_rows } = require("../services/table");
 const { create_association } = require("../services/user_table");
 const { findUserById } = require("../services/user");
-
+const { updateTablePeriode } = require("../services/table");
 
 router.get(`/:idAuteur`, async (req, res)=>{
 
@@ -70,6 +70,18 @@ router.post('/new_fonction', async (req, res) => {
 
 })
 
+
+router.post('/update_periode', async (req, res) => {
+
+
+    const result = await updateTablePeriode(req.body.table, req.body.periode);
+
+    if (!result)
+        res.status(500).send({success: false});
+
+        console.log(result);
+    res.status(200).send(result);
+})
 
 
 module.exports = router;

@@ -4,18 +4,8 @@ var Modal = {
     modal: undefined,
     oninit(vnode) {
         this.modal = vnode.attrs;
-        /*{
-            title:"Le titre",
-            saveButtonTitle:"Enregistrer",
-            style:"",
-            save(){
-                //L'action a mener avec le formulaire
-            },
-            view(){
-                return m('form','Le formulaire')
-            }
-        } */
     },
+    
     view() {
         const modal = this.modal;
         return m("div.modal-dialog", {

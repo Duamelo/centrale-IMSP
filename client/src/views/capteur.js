@@ -1,8 +1,7 @@
 var m = require("mithril")
 var capteur = require('../models/capteur.model');
-const {
-    Modal
-} = require("../components/modal");
+const { Modal } = require("../components/modal");
+
 var nbAccordion = 0;
 
 const AjouterUnCapteur = {
@@ -36,6 +35,9 @@ const AjouterUnCapteur = {
         )
     }
 }
+
+
+
 module.exports = {
     oninit() {
         capteur.getCapteurs()
@@ -72,7 +74,7 @@ module.exports = {
                             "class": "accordion-item"
                         },
                         [
-                            m("h2", {
+                            m("h5", {
                                     "class": "accordion-header",
                                     "id": "panelsStayOpen-heading" + nbAccordion
                                 },
@@ -97,25 +99,25 @@ module.exports = {
                                     },
                                     m(".contenu",
                                         [
-                                            m("h4.[class=disc]", "Description "),
-                                            m(".mb-3", " " + t.description),
-                                            m("h4[class=disc]", "Sorties"),
+                                            m("h6.[class=disc]", "Description "),
+                                            m("p.mb-3", " " + t.description),
+                                            
                                             m("table.table.table-bordered",
                                                 [
                                                     m("thead",
                                                         m("tr",
                                                             [
                                                                 m("th[scope='col']",
-                                                                    "#"
+                                                                    "sortie"
                                                                 ),
                                                                 m("th[scope='col']",
-                                                                    "Unité"
+                                                                    "unité"
                                                                 ),
                                                                 m("th[scope='col']",
-                                                                    "Valeur Minimale"
+                                                                    "valeur minimale"
                                                                 ),
                                                                 m("th[scope='col']",
-                                                                    "valeur Maximale"
+                                                                    "valeur maximale"
                                                                 )
                                                             ]
                                                         )

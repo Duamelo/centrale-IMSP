@@ -83,7 +83,7 @@ module.exports = {
                                 m('H3.nav-item', ""),
                                 m("ul.nav.flex-column", getRoutes().map((route) => {
                                         var disabled;
-                                        console.log(role + "  " + route.link)
+                                      //  console.log(role + "  " + route.link)
                                         if (role == "admin" || (role != "admin" && route.link == "/mesures"))
                                             disabled = false;
                                         else
