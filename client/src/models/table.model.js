@@ -35,7 +35,7 @@ const table = {
     AjouterAssocier(table, utilisateur) {
 
     },
-    getTables(id) {
+    getTables(id,callback) {
         m.request({
             headers: {
                 Authorization: "Bearer " + window.localStorage.jwt
@@ -46,6 +46,7 @@ const table = {
             }
         }).then((result) => {
             table.list = result
+            callback(table.list)
         }, (error) => {
             table.error = error.response.message
         })
