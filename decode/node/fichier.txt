@@ -1,0 +1,12 @@
+Voici un algorithme assez simple qui aboutit à ce résultat, qui ne requiert aucun module externe.
+
+On crée un tableau associatif fileBuffer avec en clé la ressource pour un fichier et en valeur, un tableau contenant les lignes lues.
+Le tableau filePtr a pour clé également la ressource d'un fichier et pour valeur la position dans le fichier.
+On teste si le tableau a un contenu. Si c'est le cas, on lit le premièr élément qui est supprimé par shift.
+Sinon on lit un bloc de données dans le fichier, à partir de la position pos et d'une taille de 4096 octets.
+Le nombre effectif d'octets lus est retourné dans br.
+Si ce nombre est inférieur à 4096, il n'y aura pas d'autre lecture, on supprime l'entrée du fichier dans filePtr (cela sera utilisé par la fonction eof).
+On convertit le buffer en chaîne et on découpe cette chaîne en un tableau qui est assigné à fileBuffer[handle].
+Le dernier item du tableau est effacé car la ligne est tronquée dans la plupart des cas.
+On détermine la position suivante dans le fichier en ajoutant le nombre d'octets lus, moins la taille du dernier élément.
+Quand le tableau est vide, on recommence en 4, sauf si la fin de fichier est détectée.

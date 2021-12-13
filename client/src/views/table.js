@@ -16,7 +16,25 @@ function AjouterVariable(curentTable) {
         nom: 0,
         fonction: 0,
         add() {
+        
+        m.request({
+            method: "POST",
+            url: server.url + "/tables/table/sortie",
+            body: {
+                name: this.table.nom,
+                sortie: this.variable,
+                fonction: this.fonction
+            }
+        }).then((result) => {
+            if (result != undefined) {
+                console.log(result);
+            }
+        }, (error) => {
+            if (error.code == 400)
+                credential.error = "something wrong"
+        })
             //ecrire la requete pour ajouter une variable ici
+
             const variable = {
                 id: this.table.nom,
                 nom: capteur.variableList[this.nom],
@@ -134,6 +152,7 @@ module.exports = {
                     }
                 }, "+")], "Liste des tables"),
                 table.list.map(function (t) {
+                    console.log(table);
                     nbAccordion++;
                     return m("div.accordion-item", [
                         m("h5.accordion-header", {

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { create, get_all_rows, get_one_table, getTableByAuthor } = require("../services/table");
+const { create, get_all_rows, get_one_table, getTableByAuthor, insertSortie} = require("../services/table");
 const { create_association } = require("../services/user_table");
 const { findUserById, findUserByEmail } = require("../services/user");
 const { deleteTableByName } = require("../services/table");
@@ -70,7 +70,7 @@ router.post('/table/create', async (req, res) => {
             periode: "5s"
         };
         */
-        const row = await create(req.user.userId, req.body.nom, req.body.description,  req.body.sortie, req.body.fonction, req.body.periode);
+        const row = await create(req.body.nom, req.body.description, req.user.userId, req.body.periode);
 
         console.log(row);
 
@@ -81,6 +81,30 @@ router.post('/table/create', async (req, res) => {
     }
     else    
         res.status(400).send("You're not authorised");
+})
+
+
+router.post("/table/sortie", async (req, res) => {
+    
+    if (req.user.role.isAdmin)
+    {
+        const table = await get_table_by_name(req.body.name);
+        let sortie;
+
+        if (table)
+        {
+            console.log(table);
+            sortie = await insertSortie( table[0].id, req.body.sortie, req.body.fonction);   
+        }
+            
+        if (!sortie)
+            res.status(500).json({success: false});
+
+        console.log(sortie);
+        res.status(200).send(sortie);
+    }
+    else 
+        res.status(400).send("You're note authorised");
 })
 
 
@@ -123,7 +147,10 @@ router.put("/table/:id/:periode", async (req, res) => {
 })
 /*
 router.post("/table/:name", async (req, res) => {
-    if ()
+    if (req.user.role.isAdmin)
+    {
+        const table_row = await 
+    }
 })
 */
 
