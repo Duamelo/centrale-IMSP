@@ -40,9 +40,9 @@ const table = {
             headers: {
                 Authorization: "Bearer " + window.localStorage.jwt
             },
-            url: server.url + "/tables/:id",
+            url: server.url + "/tables/get_tables/:user_id",
             params: {
-                id: id
+                user_id: id
             }
         }).then((result) => {
             table.list = result

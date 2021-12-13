@@ -2,13 +2,12 @@ const Pool = require('pg').Pool;
 require('dotenv/config');
 
 
-
-
-
 const pool = new Pool({
-   connectionString: process.env.connectionString,
+
+   connectionString: process.env.connectionString
 });
 
+process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
 
 /**
  * Query the database using the pool

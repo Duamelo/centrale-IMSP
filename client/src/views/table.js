@@ -93,6 +93,7 @@ const AjouterUneTable = {
 module.exports = {
     oninit() {
         table.getTables(jwt.token.userId)
+        console.log(jwt.token.userId);
         table.list.forEach(element => {
             element["ajouterVariable"] = AjouterVariable(element)
         });
@@ -126,6 +127,7 @@ module.exports = {
                     }
                 }, "+")], "Liste des tables"),
                 table.list.map(function(t) {
+                    console.log(table.list);
                     nbAccordion++;
                     return m("div.accordion-item", [
                             m("h5.accordion-header", {
