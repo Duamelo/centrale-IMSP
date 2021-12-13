@@ -2,7 +2,8 @@ const m = require("mithril");
 const table = require('../models/table.model');
 const { Modal } = require("../components/modal");
 const timelength = require('../components/timelength')
-const jwt = require("../config/jwt")
+const jwt = require("../config/jwt");
+const capteur = require("../models/capteur.model");
 
 var nbAccordion = 0;
 
@@ -12,28 +13,32 @@ var fonc = ["avg", "std", "max", "min"];
 function AjouterVariable(curentTable) {
     return {
         table: curentTable,
-        nom: "",
+        nom: 0,
         fonction: 0,
         add() {
+            //ecrire la requete pour ajouter une variable ici
             const variable = {
-                id: this.table.id,
-                nom: this.nom,
+                id: this.table.nom,
+                nom: capteur.variableList[this.nom],
                 fonction: fonc[this.fonction]
             }
             table.addVariableToTable(this.table, variable);
         },
         view() {
-            return m('tr', [
-                m("td"),
-                m("td",
-                    m("input[type=text].form-control#formControlInput1[placeholder=Tsonic]", {
-                        value: this.nom,
-                        oninput: (e) => {
-                            this.nom = e.target.value;
+            return m('.row.col-rows-3', [
+                m(".col",
+                    m("select.form-select", {
+                        onchange: (e) => {
+                            this.nom = e.target.value
                         }
-                    })
+                    }, capteur.variableList.map((variable, index) => {
+                        return m("option", {
+                            value: index
+                        }, variable);
+                    }))
                 ),
-                m("td",
+
+                m(".col",
                     m("select.form-select", {
                         onchange: (e) => {
                             this.fonction = e.target.value
@@ -43,7 +48,8 @@ function AjouterVariable(curentTable) {
                             value: index
                         }, fn);
                     }))),
-                m("td", m("button.bordure.btn.btn-outline-dark[type=button]", {
+
+                m(".col", m("button.bordure.btn.btn-outline-dark[type=button]", {
                     onclick: (e) => {
                         this.add();
                     }
@@ -92,18 +98,19 @@ const AjouterUneTable = {
 
 module.exports = {
     oninit() {
-        table.getTables(jwt.token.userId)
-        console.log(jwt.token.userId);
-        table.list.forEach(element => {
-            element["ajouterVariable"] = AjouterVariable(element)
-        });
+        table.getTables(jwt.token.userId,(list)=>{
+            list.forEach(element => {
+                element["ajouterVariable"] = AjouterVariable(element)
+            });
+        })
+        capteur.getVariableList()
     },
-    view: function(vnode) {
+    view: function (vnode) {
         var modal;
         return [
             m(".alert.alert-danger.alert-dismissible[role='alert']", {
-                    class: table.displayErrror() ? "" : "d-none"
-                },
+                class: table.displayErrror() ? "" : "d-none"
+            },
                 [
                     table.error,
                     m("button.btn-close[type='button'][data-bs-dismiss='alert'][aria-label='Close']")
@@ -120,85 +127,86 @@ module.exports = {
                     onclick(e) {
                         modal = document.getElementById("modal")
                         m.mount(modal, {
-                            view: function() {
+                            view: function () {
                                 return m(Modal, AjouterUneTable)
                             }
                         })
                     }
                 }, "+")], "Liste des tables"),
-                table.list.map(function(t) {
-                    console.log(table.list);
+                table.list.map(function (t) {
                     nbAccordion++;
                     return m("div.accordion-item", [
-                            m("h5.accordion-header", {
-                                    "id": "panelsStayOpen-heading" + nbAccordion
-                                },
-                                m("button", {
-                                        "class": "accordion-button collapsed",
-                                        "type": "button",
-                                        "data-bs-toggle": "collapse",
-                                        "data-bs-target": "#panelsStayOpen-collapse" + nbAccordion,
-                                        "aria-expanded": "false",
-                                        "aria-controls": "panelsStayOpen-collapse" + nbAccordion
-                                    },
-                                    t.nom
-                                )
-                            ),
-                            m("div", {
-                                    "class": "accordion-collapse collapse",
-                                    "id": "panelsStayOpen-collapse" + nbAccordion,
-                                    "aria-labelledby": "panelsStayOpen-heading" + nbAccordion
-                                },
-                                m("div", {
-                                    "class": "accordion-body"
-                                }, [
-                                    // insérer un bouton de création d'une ligne de la table et un bouton pour annuler 
-
-                                    m("p.mr-3", [
-                                        m("h6.[class=disc]", "Description "),
-                                            m("p", " " + t.description),
-                                        "période (seconde): ", m("input.periode.col-2[type=number][min=0]", {
-                                            value: t.periode,
-                                            onchange: (e) => {
-                                                t.periode = e.target.value
-                                            }
-                                        }),
-                                    ]),
-                                    m(".contenu.container-fluid", [
-
-                                        m(t.ajouterVariable),
-                                            m("table.table",
-                                                m("thead",
-                                                    m("tr",
-                                                        m("th[scope=col"),
-                                                        m("th[scope=col", "Variable"),
-                                                        m("th[scope=col]", "Fonction"),
-                                                        m("th[scope=col")
-                                                    )
-                                                ),
-                                                m("tbody",
-                                                    t["var-fonc-per"].map(function(vf, index) {
-                                                        return m("tr",
-                                                            m("td", m("button.btn-trash.bordure.btn.btn-outline-danger[type=button]", {
-                                                                onclick: (e) => {
-                                                                    table.removeVariableFromTable(t, index)
-                                                                }
-                                                            }, m('img.trash', {'src' : 'assets/img/trash.png'}))),
-                                                            m("td", vf.vare),
-                                                            m("td", vf.fonc),
-                                                            m("td")
-                                                        )
-                                                    })
-                                                )
-                                            )
-                                        ]
-
-                                    )
-
-                                ])
-
+                        m("h5.accordion-header", {
+                            "id": "panelsStayOpen-heading" + nbAccordion
+                        },
+                            m("button", {
+                                "class": "accordion-button collapsed",
+                                "type": "button",
+                                "data-bs-toggle": "collapse",
+                                "data-bs-target": "#panelsStayOpen-collapse" + nbAccordion,
+                                "aria-expanded": "false",
+                                "aria-controls": "panelsStayOpen-collapse" + nbAccordion
+                            },
+                                t.nom
                             )
-                        ]
+                        ),
+                        m("div", {
+                            "class": "accordion-collapse collapse",
+                            "id": "panelsStayOpen-collapse" + nbAccordion,
+                            "aria-labelledby": "panelsStayOpen-heading" + nbAccordion
+                        },
+                            m("div", {
+                                "class": "accordion-body"
+                            }, [
+                                // insérer un bouton de création d'une ligne de la table et un bouton pour annuler 
+
+                                m("p.mr-3", [
+                                    m("h6.[class=disc]", "Description "),
+                                    m("p", " " + t.description),
+                                    ,m('',[m('label.form-label',"période (seconde): "),
+                                        m("input.periode.col-2[type=number][min=0]", {
+                                        value: t.periode,
+                                        onchange: (e) => {
+                                            //ecrire la requete pour modifier la periode ici (t.nomm)
+                                            t.periode = e.target.value
+                                        }
+                                    })]),
+                                ]),
+                                m(".contenu.container-fluid", [
+
+                                    m(t.ajouterVariable),
+                                    m("table.table",
+                                        m("thead",
+                                            m("tr",
+                                                m("th[scope=col"),
+                                                m("th[scope=col", "Variable"),
+                                                m("th[scope=col]", "Fonction"),
+                                                m("th[scope=col")
+                                            )
+                                        ),
+                                        m("tbody",
+                                            t["var-fonc-per"].map(function (vf, index) {
+                                                return m("tr",
+                                                    m("td", m("button.btn-trash.bordure.btn.btn-outline-danger[type=button]", {
+                                                        onclick: (e) => {
+                                                            table.removeVariableFromTable(t, index)
+                                                        }
+                                                    }, m('img.trash', { 'src': 'assets/img/trash.png' }))),
+                                                    m("td", vf.vare),
+                                                    m("td", vf.fonc),
+                                                    m("td")
+                                                )
+                                            })
+                                        )
+                                    )
+                                ]
+
+                                )
+
+                            ])
+
+                        )
+                    ]
 
                     );
 
