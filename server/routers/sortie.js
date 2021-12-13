@@ -4,12 +4,17 @@ const { get_all_sortie, get_sortie_by_name } = require("../services/sortie");
 
 
 router.get(`/`, async (req, res)=>{
-    const sorties = await get_all_sortie();
+    console.log(req.user)
+    if (req.user.role.isUser) 
+    {
+        const sorties = await get_all_sortie();
 
-    if(!sorties)
-        res.status(500).json({success: false });
-
-    res.send(sorties);
+        if(!sorties)
+            res.status(500).json({success: false });
+    
+        res.send(sorties);
+    }
+    
 })
 
 router.get(`/:nom_sortie`, async (req, res)=>{

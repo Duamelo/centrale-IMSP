@@ -3,8 +3,8 @@ const app = express();
 const morgan = require('morgan');
 const cors = require('cors');
 require('dotenv/config');
-//const authJwt = require('./helpers/jwt');
-//const errorHandler = require('./helpers/error-handler');
+const authJwt = require('./helpers/jwt');
+const errorHandler = require('./helpers/error-handler');
 
 
 app.use(cors());
@@ -14,8 +14,8 @@ app.options('*', cors());
 //Middleware
 app.use(express.json());
 app.use(morgan('tiny'));
-//app.use(authJwt());
-//app.use(errorHandler);
+app.use(authJwt());
+app.use(errorHandler);
 
 
 const api = process.env.API_URL;

@@ -12,30 +12,13 @@ const { update_periode_table } = require("../services/table");
 
 router.get(`/get_tables/:user_id`, async (req, res)=>{
 
-    console.log(req);
-    
-    if (req.user.userId === req.params.user_id) 
+    console.log(req.user);
+   
+    if (req.user.userId == req.params.user_id) 
     {
-        if (req.user.role.isUser) 
+        if (req.user.role.isAdmin && req.user.role.isUser) 
         {
 
-            const tables = await get_user_table(req.params.user_id);
-    
-            if(!tables)
-                res.status(500).json({success: false });
-        
-            const user = await findUserById(tables[0].auteur);
-    
-            if (user)
-                tables.map( (row) => {
-                    row.auteur = user[0].email;
-                })
-    
-            res.status(200).send(tables);
-    
-        }
-        else 
-        {
             const tables = await getTableByAuthor(req.params.user_id);
     
             if(!tables)
@@ -50,10 +33,26 @@ router.get(`/get_tables/:user_id`, async (req, res)=>{
                     row.auteur = user[0].email;
                 })
     
-            res.status(200).send(tables);   
+            res.status(200).send(tables);  
+    
+        }
+        else 
+        {
+            const tables = await get_user_table(req.params.user_id);
+    
+            if(!tables)
+                res.status(500).json({success: false });
+        
+            const user = await findUserById(tables[0].auteur);
+    
+            if (user)
+                tables.map( (row) => {
+                    row.auteur = user[0].email;
+                })
+    
+            res.status(200).send(tables);
         }
     }
-   
     else  
         res.status(400).send("You're not authorised");
 })
@@ -122,7 +121,11 @@ router.put("/table/:id/:periode", async (req, res) => {
     else
         res.status(400).send("You're not authorised");
 })
-
+/*
+router.post("/table/:name", async (req, res) => {
+    if ()
+})
+*/
 
 router.delete("/table/:name", async(req, res) => {
 
