@@ -7,36 +7,6 @@ const router = express.Router();
 const { createUser, findUserByEmail } = require("../services/user");
 
 
-router.post('/', async (req, res) => {
-    
-
-    const { email, isAdmin, isUser, password } = req.body;
-    console.log(email + isAdmin + isUser + password);
-
-    let userExist = await findUserByEmail(email);
-    console.log(userExist);
-    if(!userExist) return res.status(400).send('Email is taken');
-
-    console.log('pass');
-
-    let passwordhash = bcrypt.hashSync(password, 10);
-
-    console.log(passwordhash);
-
-    const user = await createUser(email, isAdmin, isUser, passwordhash );
-    
-    console.log("user created" + user);
-
-    if (!user)
-        return res.status(400).send('the user cannot be created');
-
-    console.log(user);
-
-    res.status(200).send(user);
-
-})
-
-
 router.post('/login', async (req, res)=> {
 
     const { email, password } = req.body;
@@ -79,6 +49,5 @@ router.post('/login', async (req, res)=> {
         res.status(400).send("Signin failed");
     }
 })
-
 
 module.exports = router;

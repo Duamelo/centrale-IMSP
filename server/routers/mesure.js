@@ -1,14 +1,11 @@
 const express = require('express');
 const router = express.Router();
 
-const { get_all_mesures,
-        generate_table_with_stat
-} = require("../services/mesure");
+const {  generate_table_with_stat } = require("../services/mesure");
 
-const { get_one_table
-} = require("../services/table");
+const { get_table_by_name,get_table } = require("../services/table");
 
-/*
+
 router.get(`/`, async (req, res)=>{
     const mesures = await get_all_mesures();
 
@@ -18,7 +15,7 @@ router.get(`/`, async (req, res)=>{
     res.send(mesures);
 })
 
-*/
+
 
 
 router.get('/:table/:start_date/:end_date', async(req, res) => {
@@ -29,8 +26,11 @@ router.get('/:table/:start_date/:end_date', async(req, res) => {
   {
     console.log(req.params);
     var query;
-  
-    const data = await get_one_table(req.params.table, req.params.start_date, req.params.end_date);
+    let table = await get_table_by_name(req.params.table);
+    let data;
+
+    if (table)
+        data = await get_table(req.params.table);
 
     console.log(data);
     query = "with new_table as (select recordtime," +
@@ -42,7 +42,7 @@ router.get('/:table/:start_date/:end_date', async(req, res) => {
             }).join(",") +
              " from mesures m) select ts_round(recordtime, " + data[0].periode + ") as time,"  +
     data.map((item)=>{
-                 return item.fonction+"(id"+ item.id +") as " + item.fonction+"_"+item.nom_sortie 
+                 return item.fonction+"(id"+ item.id +") as " + item.fonction+"_"+item.sortie 
              }).join(',') + " from new_table where recordtime between '" + req.params.start_date + "' and '" + req.params.end_date + "' group by time"
     
     console.log(query);

@@ -10,7 +10,7 @@ const table = {
             id: this.list.length,
             nom: table.nom,
             description: table.description,
-            periode: 0,
+            periode: table.periode,
             "var-fonc-per": []
         }
         newTable.ajouterVariable = table.AjouterVariable(newTable)

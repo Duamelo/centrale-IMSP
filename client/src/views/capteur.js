@@ -1,6 +1,7 @@
 var m = require("mithril")
 var capteur = require('../models/capteur.model');
 const { Modal } = require("../components/modal");
+const server = require("../config/server");
 
 var nbAccordion = 0;
 
@@ -14,11 +15,14 @@ const AjouterUnCapteur = {
     },
     save() {
         var body = new FormData()
-        body.append("file", file)
-        console.log(this.file);
+        body.append("capteur", AjouterUnCapteur.file)
+        console.log(AjouterUnCapteur.file);
         m.request({
+            headers: {
+                Authorization: "Bearer " + window.localStorage.jwt
+            },
             method: "POST",
-            url: "/api/v1/capteur",
+            url: server.url+ "/capteurs/capteur",
             body: body,
         })
     },
@@ -26,9 +30,9 @@ const AjouterUnCapteur = {
         return m('form',
             m("div.mb-3",
                 m("label.form-label", "Charger un fichier csv"),
-                m("input[type=file].form-control[placeholder=Capteur]", {
+                m("input[type=file].form-control[placeholder=Capteur][name=capteur]", {
                     onchange: (e) => {
-                        this.file = e.target.files[0]
+                        AjouterUnCapteur.file = e.target.files[0]
                     }
                 })
             )

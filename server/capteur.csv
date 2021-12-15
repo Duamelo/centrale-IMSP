@@ -1,7 +1,8 @@
-CAPTEUR,DESCRIPTION,SORTIE,UNITE,VALEUR_MIN,VALEUR_MAX,NOM_CAPTEUR
-test,capteur test,test_x,m/s,0,10,test
-0,0,test_x,m/s,0,10,test
-0,0,test_x,m/s,0,10,test
-0,0,test_x,m/s,0,10,test
-0,0,test_x,m/s,0,10,test
-0,0,test_x,m/s,0,10,test
+test
+capteur test
+test_x,0,0,10,test
+test_y,0,0,10,test
+test_z,0,0,10,test
+test_e,0,0,10,test
+test_f,0,0,10,test
+test_g,0,0,10,test

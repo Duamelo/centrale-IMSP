@@ -10,5 +10,5 @@ exports.get_capteur_with_all_info = async () => {
 }
 
 exports.create = async (nom, description) => {
-    return db.query("insert into capteur (nom, description) values ($1, $2)", [nom, description]);
+    return db.query("insert into capteur (nom, description) values ($1, $2) returning *", [nom, description]);
 }

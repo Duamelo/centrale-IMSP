@@ -1,0 +1,697 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "Centrale météorologique",
+        "description": "Ensemble des points de terminaison de l'api",
+        "licence": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        }
+    },
+    "host": "localhost:4000",
+    "basePath": "/api/v1",
+    "tags": [
+        {
+            "name": "Centrale",
+            "description": "API pour les utilisateurs du système"
+        }
+    ],
+    "shemes": ["http"],
+    "consomme": ["application/json"],
+    "produces": ["application/json"],
+
+    "paths": {
+        "/users": {
+            "get": {
+                "tags": ["Users"],
+                "summary": "Obtenir tous les utilisateurs du système",
+                "consomme": ["application/json"],
+                "produces": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "500": {
+                        "description": "erreur interne au serveur"
+                    },
+                    "401": {
+                        "description": "Utilisateur non autorisé"
+                    }
+                }
+            },
+            "post": {
+                "tags": ["Users"],
+                "consomme": ["application/json"],
+                "produces": ["application/json"],
+                "summary": "Créer un nouvel utilisateur dans le système",
+                "parameters": [
+                    {
+                        "name": "email",
+                        "in": "body",
+                        "description": "nom de l'utilisateur",
+                        "required": "true",
+                        "type": "string",
+                        "format": "formData"
+                    },
+                    {
+                        "name": "isAdmin",
+                        "in": "body",
+                        "description": "role de l'utilisateur",
+                        "required": "true",
+                        "type": "boolean",
+                        "format": "formData"
+                    },
+                    {
+                        "name": "isUser",
+                        "in": "body",
+                        "description": "role de l'utilisateur",
+                        "required": "true",
+                        "type": "boolean",
+                        "format": "formData"
+                    },
+                    {
+                        "name": "password",
+                        "in": "body",
+                        "description": "mot de passe de l'utilisateur",
+                        "required": "true",
+                        "type": "string",
+                        "format": "formData"
+                    }
+                    
+                ],
+                "responses": {
+                    "200": {
+                        "description": "utilisateur créé"
+                    },
+                    "400": {
+                        "description": "L'utilisateur ne peut pas être créer / l'email est pris"
+                    }
+                }
+            }
+        },
+        "/auth/login": {
+            "post": {
+                "tags": ["Auth"],
+                "summary": "S'authentifier sur le système",
+                "consomme": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "body",
+                        "description": "email de l'utilisateur",
+                        "required": "true",
+                        "type": "string",
+                        "format": "formData"
+                    },
+                    {
+                        "name": "password",
+                        "in": "body",
+                        "description": "mot de passe de l'utilisateur",
+                        "required": "true",
+                        "type": "string",
+                        "format": "formData"
+                    }
+                ],
+                "responses": {
+                    "200": {
+
+                    },
+                    "400": {
+
+                    },
+                    "401": {
+                        
+                    }
+                }
+            }
+        },
+        "/capteurs":{
+            "get": {
+                "tags": ["Capteur"],
+                "summary": "Liste de tous les capteurs",
+                "consomme": ["application/json"],
+                "produces": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "erreur lié au server/ ressource non trouvée"
+                    },
+                    "401": {
+                        "description": "Utilisateur non autorisé"
+                    }
+                }
+            }
+        },
+        "/capteurs/capteur": {
+            "post": {
+                "tags": ["Capteur"],
+                "summary": "Enregistrer un nouveau capteur",
+                "consomme": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "name": "capteur",
+                        "in": "body",
+                        "description": "fichier renseignat les informations sur le capteur à enregister",
+                        "required": "true",
+                        "type": "fichier",
+                        "format":"formData"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Le capteur est enregistré"
+                    },
+                    "400": {
+                        "description": "erreur lié au server"
+                    },
+                    "401": {
+                        "description": "utilisateur non autorisé"
+                    }
+                }
+                
+            }
+        },
+        "/table/create": {
+            "post": {
+                "tags": ["Tables"],
+                "summary": "créer une nouvelle table utilisateur",
+                "consomme": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "name": "nom",
+                        "in": "body",
+                        "description": "nom de la table",
+                        "type": "string",
+                        "format": "formData",
+                        "required": "true"
+                    },
+                    {
+                        "name": "description",
+                        "in": "body",
+                        "description": "description de la table",
+                        "type": "string",
+                        "format": "formData",
+                        "required": "true"
+                    },
+                    {
+                        "name": "auteur",
+                        "in": "query",
+                        "description": "id de l'auteur de la table à lire dans le token",
+                        "type": "integer",
+                        "required": "true"
+                    },
+                    {
+                        "name": "periode",
+                        "in": "body",
+                        "description": "periode de la table",
+                        "type": "integer",
+                        "format": "formData",
+                        "required": "true"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "La table est enregistrée"
+                    },
+                    "500": {
+                        "description": "erreur lié au server"
+                    },
+                    "401": {
+                        "description": "utilisateur non autorisé"
+                    }
+                }
+                
+            }
+        },
+        "/tables/get_tables/{userid}": {
+            "get": {
+                "tags": ["Tables"],
+                "summary": "Liste des tables associées à un utilisateur",
+                "consomme": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "name": "userid",
+                        "in": "path",
+                        "required": "true",
+                        "type": "integer",
+                        "description": " id de l'utiliateur connecté à lire dans le token"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Liste obtenue"
+                    },
+                    "500": {
+                        "description": "erreur lié au server"
+                    },
+                    "401": {
+                        "description": "utilisateur non autorisé"
+                    }
+                }
+            }
+        },
+        "/tables/table/sortie": {
+            "post": {
+                "tags": ["Tables"],
+                "summary": "ajouter une variable à une table",
+                "consomme": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "name": "table_name",
+                        "in": "body",
+                        "required": "true",
+                        "type": "string",
+                        "description": "nom de la table concernée"
+                    },
+                    {
+                        "name": "sortie",
+                        "in": "body",
+                        "required": "true",
+                        "type": "string",
+                        "description": "variable à ajouter"
+                    },
+                    {
+                        "name": "fonction",
+                        "in": "body",
+                        "required": "true",
+                        "type": "string",
+                        "description": "fonction associée à la variable"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Variable ajouté avec succès"
+                    },
+                    "500": {
+                        "description": "erreur lié au server"
+                    },
+                    "401": {
+                        "description": "utilisateur non autorisé"
+                    }
+                }
+
+            }
+        },
+        "/tables/table/association": {
+            "post": {
+                "tags": ["Tables"],
+                "summary": "associer un utilisateur à une table donnée",
+                "consomme": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "body",
+                        "required": "true",
+                        "type": "string",
+                        "description": "utilisateur pouvant consulter la table"
+                    },
+                    {
+                        "name": "table_name",
+                        "in": "body",
+                        "required": "true",
+                        "type": "string",
+                        "description": "table à associer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Association effectuée avec succès"
+                    },
+                    "500": {
+                        "description": "erreur lié au server"
+                    },
+                    "401": {
+                        "description": "utilisateur non autorisé"
+                    }
+                }
+
+            }
+        },
+        "/tables/table/{table_name}/{periode}": {
+            "put": {
+                "tags": ["Tables"],
+                "summary": "Mettre à jour la période d'une table",
+                "consomme": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "name": "table_name",
+                        "in": "path",
+                        "required": "true",
+                        "type": "string",
+                        "description": "nom de la table concernée"
+                    },
+                    {
+                        "name": "periode",
+                        "in": "path",
+                        "required": "true",
+                        "type": "string",
+                        "description": "nouvelle période"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "mise à jour effectuée avec succès"
+                    },
+                    "500": {
+                        "description": "erreur lié au server"
+                    },
+                    "401": {
+                        "description": "utilisateur non autorisé"
+                    }
+                }
+            }
+        },
+        "/tables/table/{name}": {
+            "delete": {
+                "tags": ["Tables"],
+                "summary": "Suppression d'une table",
+                "consomme": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": "true",
+                        "type": "string",
+                        "description": "nom de la table à supprimer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "suppression effectuée avec succès"
+                    },
+                    "500": {
+                        "description": "erreur lié au server"
+                    },
+                    "401": {
+                        "description": "utilisateur non autorisé"
+                    }
+                }
+            }
+        },
+        "/tables/table/{name}/{variable}/{fonction}": {
+            "delete": {
+                "tags": ["Tables"],
+                "summary": "suppression d'une ligne d'une table donnée",
+                "consomme": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": "true",
+                        "type": "string",
+                        "description": "nom de la table concernée"
+                    },
+                    {
+                        "name": "variable",
+                        "in": "path",
+                        "required":"true",
+                        "type":"string",
+                        "description": "variable à supprimer"
+                    },
+                    {
+                        "name": "fonction",
+                        "in": "path",
+                        "required":"true",
+                        "type":"string",
+                        "description": "fonction associée à la variable "   
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "suppression effectuée avec succès"
+                    },
+                    "500": {
+                        "description": "erreur lié au server"
+                    },
+                    "401": {
+                        "description": "utilisateur non autorisé"
+                    }
+                }
+            }
+        },
+        "/tables": {
+            "get": {
+                "tags": ["Tables"],
+                "summary": "Liste des noms de toutes les tables",
+                "consomme": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Liste des noms obtenue"
+                    },
+                    "500": {
+                        "description": "erreur lié au server"
+                    },
+                    "401": {
+                        "description": "utilisateur non autorisé"
+                    }
+                }
+            }
+        },
+        "/sorties": {
+            "get": {
+                "tags": ["Sorties"],
+                "summary": "Liste de toutes les sorties des capteurs",
+                "consomme": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Liste des sorties obtenue"
+                    },
+                    "500": {
+                        "description": "erreur lié au server"
+                    },
+                    "401": {
+                        "description": "utilisateur non autorisé"
+                    }
+                }
+            }
+        },
+        "/sorties/{nom_sortie}": {
+            "get": {
+                "tags": ["Sorties"],
+                "summary": "Obtenir une sortie donnée",
+                "consomme": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "sortie obtenue"
+                    },
+                    "500": {
+                        "description": "erreur lié au server"
+                    },
+                    "401": {
+                        "description": "utilisateur non autorisé"
+                    }
+                }
+            }
+        },
+        "/mesures": {
+            "get": {
+                "tags": ["Mesures"],
+                "summary": "Liste de toutes les mesures dans la base",
+                "consomme": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Liste obtenue"
+                    },
+                    "500": {
+                        "description": "erreur lié au server"
+                    },
+                    "401": {
+                        "description": "utilisateur non autorisé"
+                    }
+                }
+            }
+        },
+        "/mesures/{table}/{start_date}/{end_date}": {
+            "get": {
+                "tags": ["Mesures"],
+                "summary": "Obtenir les statistiques d'une table sur une période donnée",
+                "consomme": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "name": "table",
+                        "in": "path",
+                        "type": "string",
+                        "required": "true",
+                        "description": "nom de la tables à consulter"
+                    },
+                    {
+                        "name": "start_date",
+                        "in": "path",
+                        "type": "string",
+                        "required": "true",
+                        "description": "début de la période"
+                    },
+                    {
+                        "name": "end_date",
+                        "in": "path",
+                        "type": "string",
+                        "required": "true",
+                        "description": "fin de la période"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "500": {
+                        "description": "erreur lié au server"
+                    },
+                    "401": {
+                        "description": "utilisateur non autorisé"
+                    }
+                }
+            }
+        }
+       
+    },   
+    "definitions": {
+        "User": {
+            "required": ["email","password"],
+            "properties": {
+                "id": {
+                    "type": "serial",
+                    "uniqueItems": true
+                },
+                "isAdmin": {
+                    "type": "boolean"
+                },
+                "isUser": {
+                    "type": "boolean"
+                },
+                "password": {
+                    "type": "varchar"
+                }
+            }
+        },
+        "Capteur": {
+            "required": ["nom", "description"],
+            "properties": {
+                "nom": {
+                    "type": "varchar",
+                    "uniqueItems": true
+                },
+                "description": {
+                    "type": "text"
+                }
+            }
+        },
+        "Mesures": {
+            "required": ["recordtime", "valeur", "id_sortie"],
+            "properties": {
+                "recordno": {
+                    "type":"serial",
+                    "uniqueItems": true
+                },
+                "recordtime": {
+                    "type": "timestamp"
+                },
+                "valeur": {
+                    "type": "numeric"
+                },
+                "id_sortie": {
+                    "type": "serial"
+                }
+            }
+        },
+        "Tables": {
+            "required": ["auteur", "nom", "description", "periode"],
+            "properties": {
+                "id": {
+                    "type": "serial",
+                    "uniqueItems": true
+                },
+                "nom": {
+                    "type": "varchar"
+                },
+                "description": {
+                    "type": "varchar"
+                },
+                "auteur": {
+                    "type": "serial"
+                },
+                "periode": {
+                    "type": "numeric"
+                }
+            }
+        },
+        "Parametre": {
+            "required": ["id_tables", "sortie", "fonction"],
+            "properties": {
+                "id": {
+                    "type": "serial",
+                    "uniqueItems": true
+                },
+                "id_tables": {
+                    "type": "serial" 
+                },
+                "sortie": {
+                    "type": "varchar"
+                },
+                "fonction": {
+                    "type": "varchar"
+                }
+            }
+        },
+        "User-table": {
+            "required": ["user_id, table_id"],
+            "properties": {
+                "id": {
+                    "type": "serial",
+                    "uniqueItems": true
+                },
+                "user_id": {
+                    "type": "serial"
+                },
+                "table_id": {
+                    "type": "serial"
+                }
+            }
+        },
+        "Sortie": {
+            "required": ["nom_capteur"],
+            "properties": {
+                "id": {
+                    "type": "serial",
+                    "uniqueItems": true
+                },
+                "nom_sortie": {
+                    "type": "varchar"
+                },
+                "unite": {
+                    "type": "varchar"
+                },
+                "valeur_min": {
+                    "type": "numeric"
+                },
+                "valeur_max": {
+                    "type": "numeric"
+                },
+                "nom_capteur": {
+                    "type": "varchar"
+                }
+            }
+            
+        }
+    }
+}

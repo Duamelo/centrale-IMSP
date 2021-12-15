@@ -1,31 +1,24 @@
 var express = require('express');
 const router = express.Router();
-
-const csv = require('csv-parser');
 const fs = require('fs');
 const multer = require('multer');
-//const upload = multer({dest: '../uploads/'});
+const path = require('path');
+
+const { get_capteur_with_all_info, create } = require("../services/capteur");
+const { insert_sortie_into_capteur } = require("../services/sortie");
 
 
-const { get_capteur_with_all_info } = require("../services/capteur");
-
-const FILE_TYPE_MAP = {
-    'file/csv': 'csv'
-}
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'uploads/');
+      cb(null, './');
     },
     filename: function (req, file, cb) {
-
-        const filename = file.originalname.split(' ').join('-');
-        // const extension = FILE_TYPE_MAP[file.mimetype];
-        cb(null, `${filename}`);
+      cb(null, file.fieldname + '.csv')
     }
-})
-const uploadOptions = multer({ storage: storage });
+  })
 
+const upload = multer({ storage: storage });
 
 
 
@@ -46,24 +39,53 @@ router.get('/', async (req, res) => {
 })
 
 
-router.post("/capteur", /*uploadOptions.single('capteur_file'), */ async (req, res) => {
+router.post("/capteur", upload.single('capteur'),  async (req, res) => {
 
     if (req.user.role.isAdmin) {
-        const results = [];
-        const capteur_file = require("./capteur.csv");
+        var capteur;
+        var output;
+        fs.createReadStream('capteur.csv', 'utf-8')
+        .on('data', async (row) =>  {
+            
+            
+            var data = row.split("\n");
+            console.log(data);
+            
+            n_capteur = data[0];
+            desc = data[1];
+            console.log(n_capteur, desc);
 
-        /* if(!capteur_file)
-            return res.status(400).send('No file in the request');*/
+            capteur = await create(n_capteur, desc);
 
-        fs.createReadStream(capteur_file)
-            .pipe(csv())
-            .on('data', (data) => results.push(data))
-            .on('end', () => {
-                console.log(results);
-            });
-        res.send("ok");
+            if(!capteur)
+                res.status(500).json({success: false});
+            console.log(capteur);
 
+    
+            data.map( async (line, index) =>{
+                if(index >=2)
+                {
+                    l = line.split(',');
+                    
+                    console.log(l);
+
+                    output = await insert_sortie_into_capteur(l[0], l[1], l[2], l[3], l[4]);
+                    
+                    if(!output)
+                        res.status(500).send({success: false});
+                    console.log(output);
+                }
+            })
+            res.status(200).json({
+               success: true
+            })
+        })
+        .on('end', ()=> {
+            console.log('CSV file successfully processed');
+        });
     }
+    else 
+    res.status(400).send("You're not authorized");
 })
 
 module.exports = router;

@@ -139,7 +139,7 @@ module.exports = {
             name: "Graphe",
             view() {
                 return (form.isReady ? m(graphView, {
-                    max: mesure.mesure.data.temps.length
+                    max: mesure.mesure.data.time.length
                 }) : m("img.graphe", {
                     alt: "Rien à affiche",
                     src: "assets/img/graphe.png"
@@ -202,8 +202,8 @@ const graphView = {
                 ])),
             m(graph, {
                 type: "line", //this.types[this.type],
-                labels: mesure.mesure.data.temps, //.slice(0, this.size),
-                datas: Object.keys(mesure.mesure.data).filter((value) => value != "temps").map((variable) => {
+                labels: mesure.mesure.data.time, //.slice(0, this.size),
+                datas: Object.keys(mesure.mesure.data).filter((value) => value != "time").map((variable) => {
                     return {
                         label: variable,
                         data: mesure.mesure.data[variable], //.slice(0, this.size),

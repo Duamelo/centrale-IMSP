@@ -13,3 +13,8 @@ exports.findUserByEmail = (email)=> {
 exports.findUserById = (id) => {
     return db.query('select * from "user" where id=$1', [id]);
 }
+
+exports.emailList = async () => {
+    return db.query('select email from "user" ');
+}
+

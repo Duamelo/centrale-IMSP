@@ -1,46 +1,57 @@
-var fs = require('fs')
-var filePtr = {}
-var fileBuffer = {}
-var buffer = new Buffer(4096)
+var fs = require('fs');
+var csv = require('csv-parser')
 
-exports.fopen = function(path, mode) {
-  var handle = fs.openSync(path, mode)
-  filePtr[handle] = 0
-  fileBuffer[handle]= []
-  return handle
-}
+fs.createReadStream('capteur.csv', 'utf-8')
+    .on('data', (row) =>  {
 
-exports.fclose = function(handle) {
-  fs.closeSync(handle)
-  if (handle in filePtr) {
-    delete filePtr[handle]
-    delete fileBuffer[handle]
-  } 
-  return
-}
+        var data = row.split("\n");
+        //console.log(data);
+        
+        /*n_capteur = data[0];
+        desc = data[1];
+        console.log(n_capteur, desc);*/
 
-exports.fgets = function(handle) { 
-  if(fileBuffer[handle].length == 0)
-  {
-    var pos = filePtr[handle]
-    var br = fs.readSync(handle, buffer, 0, 4096, pos)
-    if(br < 4096) {
-      delete filePtr[handle]
-      if(br == 0)  return false
+        data.map( (line, index) =>{
+           
+            if(index >=2)
+            {
+                console.log(line, index);
+                l = line.split(',');
+                console.log(l);
+            }
+        })
+      
+
+    })
+    .on('end', ()=> {
+        console.log('CSV file successfully processed');
+    });
+
+    /*
+let i = 0;
+
+fs.createReadStream('capteur.csv')
+.pipe(csv())
+.on('data', (row) => {
+    let nom_capteur, description;
+    if (i == 0)
+    {
+        nom_capteur = row.capteur;
+        description = row.description;
+        console.log( nom_capteur, description);
     }
-    var lst = buffer.slice(0, br).toString().split("\n")
-    var minus = 0
-    if(lst.length > 1) {
-      var x = lst.pop()
-      minus = x.length
-    } 
-    fileBuffer[handle] = lst 
-    filePtr[handle] = pos + br - minus
-  }
-  return fileBuffer[handle].shift()
-}
 
-exports.eof = function(handle) {
-  return (handle in filePtr) == false && (fileBuffer[handle].length == 0) 
-}
 
+    sortie = row.sortie;
+    unite = row.unite;
+    v_min = row.valeur_min;
+    v_max = row.valeur_max;
+    n_capteur = row.nom_capteur;
+    console.log(sortie, unite, v_max, v_min, n_capteur);
+    i++;
+})
+.on('end', ()=> {
+    console.log('CSV file successfully processed');
+    console.log(i);
+})
+*/

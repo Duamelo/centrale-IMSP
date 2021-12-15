@@ -2,6 +2,7 @@ const m = require("mithril");
 const table = require('../models/table.model');
 const { Modal } = require("../components/modal");
 const timelength = require('../components/timelength')
+const server = require('../config/server');
 const jwt = require("../config/jwt");
 const capteur = require("../models/capteur.model");
 
@@ -16,31 +17,27 @@ function AjouterVariable(curentTable) {
         nom: 0,
         fonction: 0,
         add() {
-        
-        m.request({
-            method: "POST",
-            url: server.url + "/tables/table/sortie",
-            body: {
-                name: this.table.nom,
-                sortie: this.variable,
-                fonction: this.fonction
-            }
-        }).then((result) => {
-            if (result != undefined) {
-                console.log(result);
-            }
-        }, (error) => {
-            if (error.code == 400)
-                credential.error = "something wrong"
-        })
-            //ecrire la requete pour ajouter une variable ici
-
-            const variable = {
-                id: this.table.nom,
-                nom: capteur.variableList[this.nom],
-                fonction: fonc[this.fonction]
-            }
-            table.addVariableToTable(this.table, variable);
+            m.request({
+                headers: {
+                    Authorization: "Bearer " + window.localStorage.jwt
+                },
+                method: "POST",
+                url: server.url + "/tables/table/sortie",
+                body: {
+                    name: this.table.nom,
+                    sortie: capteur.variableList[this.nom],
+                    fonction: fonc[this.fonction]
+                }
+            }).then((result) => {
+                if (result != undefined) {
+                    table.addVariableToTable(this.table, {  
+                        nom: capteur.variableList[this.nom],
+                        fonction: fonc[this.fonction]});
+                }
+            }, (error) => {
+                if (error.code == 400)
+                    credential.error = "something wrong"
+            })
         },
         view() {
             return m('.row.col-rows-3', [
@@ -82,12 +79,32 @@ const AjouterUneTable = {
     title: "Ajouter une table",
     saveButtonTitle: "Ajouter",
     nomTable: "",
+    periode:0,
     description: "",
+    sortie: "",
+    fonction: "",
     save() {
-        table.addTable({
-            nom: AjouterUneTable.nomTable,
-            description: AjouterUneTable.description,
-            AjouterVariable: AjouterVariable
+        m.request({
+            headers: {
+                Authorization: "Bearer " + window.localStorage.jwt
+            },
+            method: "POST",
+            url: server.url + "/tables/table/create",
+            body: {
+                nom: AjouterUneTable.nomTable,
+                description: AjouterUneTable.description,
+                periode: AjouterUneTable.periode, 
+                sortie: AjouterUneTable.sortie,
+                fonction: AjouterUneTable.fonction
+            }
+        }).then((response)=>{
+            console.group(response);
+            table.addTable({
+                nom: AjouterUneTable.nomTable,
+                description: AjouterUneTable.description,
+                periode: AjouterUneTable.periode,
+                AjouterVariable: AjouterVariable
+            })
         })
     },
     view() {
@@ -108,6 +125,97 @@ const AjouterUneTable = {
                         AjouterUneTable.description = e.target.value
                     }
                 })
+            ), m("div.mb-3",
+                m("label[for=formControlInput1].form-label", "Periode(en seconde)"),
+                m("input[type=number].form-control[placeholder='3600']", {
+                    value: AjouterUneTable.periode,
+                    oninput: (e) => {
+                        AjouterUneTable.periode = e.target.value
+                    }
+                })
+            ),
+            m("div.mb-3",
+                m("label[for=formControlInput1].form-label", "Sortie"),
+                m("select.form-select", {
+                    onchange: (e) => {
+                        AjouterUneTable.sortie = e.target.value
+                    }
+                }, capteur.variableList.map((variable, index) => {
+                    return m("option", {
+                        value: index
+                    }, variable);
+                }))
+        ),
+        m("div.mb-3",
+                m("label[for=formControlInput1].form-label", "Fonction"),
+                m("select.form-select", {
+                    onchange: (e) => {
+                        AjouterUneTable.fonction = e.target.value
+                    }
+                }, fonc.map((fn, index) => {
+                    return m("option", {
+                        value: index
+                    }, fn);
+                }))                
+            )
+        ]
+    }
+}
+
+
+const Associer = {
+    title: "Associer a un utilisateur",
+    saveButtonTitle: "Ajouter",
+    table: 0,
+    username:0,
+    utilisateurs: [],
+    oninit(vnode){
+        m.request({
+            headers: {
+                Authorization: "Bearer " + window.localStorage.jwt
+            },
+            url:server.url +"/users"
+        }).then((response)=>{
+            Associer.utilisateurs = response.map(user => user.email)
+        })
+    },
+    save() {
+        m.request({
+            headers: {
+                Authorization: "Bearer " + window.localStorage.jwt
+            },
+            method:'POST',
+            url:server.url + '/tables/table/association',
+            body:{
+                username:this.utilisateurs[this.username],
+                table_name:table.list[this.table].nom
+            }
+        })
+    },
+    view() {
+        return [
+            m("div.mb-3",
+                m("label[for=formControlInput1].form-label", "Nom de la Table"),
+                m("select.form-select", {
+                    onchange: (e) => {
+                        this.table = e.target.value
+                    }
+                }, table.list.map((variable, index) => {
+                    return m("option", {
+                        value: index
+                    }, variable.nom);
+                }))
+            ), m("div.mb-3",
+                m("label[for=formControlInput1].form-label", "Utilisateur"),
+                m("select.form-select", {
+                    onchange: (e) => {
+                        this.username = e.target.value
+                    }
+                }, this.utilisateurs.map((variable, index) => {
+                    return m("option", {
+                        value: index
+                    }, variable);
+                }))
             )
         ]
     }
@@ -116,7 +224,7 @@ const AjouterUneTable = {
 
 module.exports = {
     oninit() {
-        table.getTables(jwt.token.userId,(list)=>{
+        table.getTables(jwt.token.userId, (list) => {
             list.forEach(element => {
                 element["ajouterVariable"] = AjouterVariable(element)
             });
@@ -150,7 +258,19 @@ module.exports = {
                             }
                         })
                     }
-                }, "+")], "Liste des tables"),
+                }, "+"),m("button.bordure.me-3.btn.btn-outline-dark[type=button][data-bs-target=#modal][data-bs-toggle=modal]", {
+                    style: {
+                        float: "right"
+                    },
+                    onclick(e) {
+                        modal = document.getElementById("modal")
+                        m.mount(modal, {
+                            view: function () {
+                                return m(Modal, Associer)
+                            }
+                        })
+                    }
+                }, "Associer")], "Liste des tables"),
                 table.list.map(function (t) {
                     console.log(table);
                     nbAccordion++;
@@ -174,24 +294,43 @@ module.exports = {
                             "id": "panelsStayOpen-collapse" + nbAccordion,
                             "aria-labelledby": "panelsStayOpen-heading" + nbAccordion
                         },
-                            m("div", {
-                                "class": "accordion-body"
-                            }, [
-                                // insérer un bouton de création d'une ligne de la table et un bouton pour annuler 
-
-                                m("p.mr-3", [
-                                    m("h6.[class=disc]", "Description "),
-                                    m("p", " " + t.description),
-                                    ,m('',[m('label.form-label',"période (seconde): "),
-                                        m("input.periode.col-2[type=number][min=0]", {
+                            m("div.accordion-body.mb-2", [
+                                m('.row.g-3', [
+                                    m("h6.col-auto", "Description "),
+                                    m("p.col-auto", " " + t.description)
+                                ]),
+                                , m('.row.g-3', [
+                                    m('label.form-label.col-auto.mt-3', "Période (seconde): "),
+                                    m("input.periode.me-3.col-auto[type=number][min=0]", {
                                         value: t.periode,
                                         onchange: (e) => {
                                             //ecrire la requete pour modifier la periode ici (t.nomm)
                                             t.periode = e.target.value
                                         }
-                                    })]),
+                                    }),
+                                    m('.col-auto',m("buton[type='button'].btn.btn-outline-dark", {
+                                        onclick: (e) => {
+                                            m.request({
+                                                headers: {
+                                                    Authorization: "Bearer " + window.localStorage.jwt
+                                                },
+                                                method: "PUT",
+                                                url: server.url + "/tables/table/:id/:periode",
+                                                params:{
+                                                    id:t.nom,
+                                                    periode: t.periode
+                                                }
+                                            }).then((result) => {
+                                            }, (error) => {
+                                                if (error.code == 400)
+                                                    credential.error = "something wrong"
+                                            })
+                                        }
+                                    }, "Metre à jour")
+)
                                 ]),
-                                m(".contenu.container-fluid", [
+                                ,
+                                m(".contenu.container-fluid.mt-2", [
 
                                     m(t.ajouterVariable),
                                     m("table.table",
@@ -208,6 +347,23 @@ module.exports = {
                                                 return m("tr",
                                                     m("td", m("button.btn-trash.bordure.btn.btn-outline-danger[type=button]", {
                                                         onclick: (e) => {
+                                                            m.request({
+                                                                headers: {
+                                                                    Authorization: "Bearer " + window.localStorage.jwt
+                                                                },
+                                                                method: "DELETE",
+                                                                url: server.url + "/tables/table/:name/:variable/:fonction",
+                                                                params: {
+                                                                    name:t.nom,
+                                                                    variable: vf.vare,
+                                                                    fonction: vf.fonc
+                                                                }
+                                                            }).then((result) => {
+                                                            }, (error) => {
+                                                                credential.error = "something wrong"
+                                                                console.log(error);
+                                                            })
+                                                
                                                             table.removeVariableFromTable(t, index)
                                                         }
                                                     }, m('img.trash', { 'src': 'assets/img/trash.png' }))),
