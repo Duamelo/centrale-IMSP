@@ -3,8 +3,12 @@ require('dotenv/config');
 
 
 const pool = new Pool({
-
-   connectionString: process.env.connectionString
+  host: process.env.HOST,  
+  user: process.env.USER,
+  password: process.env.PASSWORD,
+  database: process.env.DATABASE,
+  port: process.env.DB_PORT
+ // connectionString: process.env.connectionString
 });
 
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;

@@ -77,9 +77,9 @@ router.post('/table/create', async (req, res) => {
         if(!table)
             res.status(500).json({success: false});
 
-        const row = await insertSortie(table[0].id, req.body.sortie, req.body.fonction);
+        /*const row = await insertSortie(table[0].id, req.body.sortie, req.body.fonction);
 
-        if(row)
+        if(row)*/
         res.status(200).send(table);
     }
     else    
@@ -119,6 +119,7 @@ router.post('/table/association/', async (req, res) => {
         const user = await findUserByEmail(req.body.username);
         const table = await get_table_by_name(req.body.table_name);
 
+        console.log(req.body.username, req.body.table_name);
         if (user && table)
              result = await create_association(user[0].id, table[0].id );
         else 

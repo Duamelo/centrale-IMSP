@@ -94,8 +94,8 @@ const AjouterUneTable = {
                 nom: AjouterUneTable.nomTable,
                 description: AjouterUneTable.description,
                 periode: AjouterUneTable.periode, 
-                sortie: AjouterUneTable.sortie,
-                fonction: AjouterUneTable.fonction
+               // sortie: AjouterUneTable.sortie,
+                //fonction: AjouterUneTable.fonction
             }
         }).then((response)=>{
             console.group(response);
@@ -134,7 +134,7 @@ const AjouterUneTable = {
                     }
                 })
             ),
-            m("div.mb-3",
+           /* m("div.mb-3",
                 m("label[for=formControlInput1].form-label", "Sortie"),
                 m("select.form-select", {
                     onchange: (e) => {
@@ -157,7 +157,7 @@ const AjouterUneTable = {
                         value: index
                     }, fn);
                 }))                
-            )
+            )*/
         ]
     }
 }
@@ -174,6 +174,7 @@ const Associer = {
             headers: {
                 Authorization: "Bearer " + window.localStorage.jwt
             },
+            method:'GET',
             url:server.url +"/users"
         }).then((response)=>{
             Associer.utilisateurs = response.map(user => user.email)
@@ -198,6 +199,7 @@ const Associer = {
                 m("label[for=formControlInput1].form-label", "Nom de la Table"),
                 m("select.form-select", {
                     onchange: (e) => {
+                        console.log(e.target.value);
                         this.table = e.target.value
                     }
                 }, table.list.map((variable, index) => {
@@ -209,6 +211,7 @@ const Associer = {
                 m("label[for=formControlInput1].form-label", "Utilisateur"),
                 m("select.form-select", {
                     onchange: (e) => {
+                        console.log(e.target.value);
                         this.username = e.target.value
                     }
                 }, this.utilisateurs.map((variable, index) => {

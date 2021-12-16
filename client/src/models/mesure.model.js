@@ -19,7 +19,8 @@ exports.mesure = {
         }).then((result) => {
             data = result
             this.list = result
-            this.data = this.GetData(table, data)
+            this.data = this.GetData(table, data);
+            console.log(data);
         }, (error) => {
             console.log("Something went wrong", error)
         })

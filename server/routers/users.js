@@ -11,9 +11,9 @@ const { emailList } = require("../services/user");
 
 router.post('/', async (req, res) => {
     
-
+    
     const { email, isAdmin, isUser, password } = req.body;
-    console.log(email + isAdmin + isUser + password);
+    console.log(req.body);
 
     let userExist = await findUserByEmail(email);
     console.log(userExist);

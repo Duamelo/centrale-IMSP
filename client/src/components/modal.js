@@ -29,7 +29,7 @@ var Modal = {
                             var a = modal.clean == undefined ? "" : modal.clean()
                         }
                     }, "Close"),
-                    m("button.btn.btn-primary[type=button]", {
+                    m("button.btn.btn-primary[type=button][data-bs-dismiss=modal]", {
                         onclick: (e) => {
                             modal.save();
                         }

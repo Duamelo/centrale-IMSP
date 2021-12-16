@@ -1,7 +1,9 @@
 var m = require("mithril");
 const jwt = require("../config/jwt")
 var mesure = require("../models/mesure.model");
-const graph = require("../components/chart")
+const graph = require("../components/chart");
+const graphPlotly = require("../components/plotly");
+
 const {
     list
 } = require("../models/table.model");
@@ -145,6 +147,17 @@ module.exports = {
                     src: "assets/img/graphe.png"
                 }))
             }
+        }),
+        tabs.addTab({
+            name: "Graphe2",
+            view() {
+                return (form.isReady ? m(plotlyView, {
+                    max: mesure.mesure.data.time.length
+                }) : m("img.graphe", {
+                    alt: "Rien à affiche",
+                    src: "assets/img/graphe.png"
+                }))
+            }
         })
     },
     view: function(vnode) {
@@ -216,4 +229,52 @@ const graphView = {
         ];
     }
 }
-// (form.isReady ?
+
+
+const plotlyView = {
+    oninit(vnode) {
+
+    },
+    view(vnode) {
+        return m(graphPlotly, {
+            layout: {
+                titile: "Time Series",
+                xaxis: {
+                    autorange: true,
+                    range: ['2021-09-01', '2021-10-01'],
+                    rangeselectore: {buttons: [
+                        {
+                            count: 1,
+                            label: '1m',
+                            step: 'month',
+                            stepmode: 'backward'
+                          },
+                          {
+                            count: 6,
+                            label: '6m',
+                            step: 'month',
+                            stepmode: 'backward'
+                          },
+                          {step: 'all'}
+                    ]},
+                    rangeslider: {range: ['2021-09-01', '2021-10-01']},
+                    type: 'date'
+                },
+                yaxis: {
+                    autorange: true,
+                    type: 'linear'
+                }
+            },
+            time: mesure.mesure.data.time,
+            datas: Object.keys(mesure.mesure.data).filter((value) => value != "time").map((variable) => {
+                return {
+                    type: "scatter",
+                    mode: "lines",
+                    name: variable,
+                    y: mesure.mesure.data[variable], //.slice(0, this.size),
+                    line: {color: '#7F7F7F' }
+                };
+            })
+        })
+    }
+}
