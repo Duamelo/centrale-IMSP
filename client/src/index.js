@@ -7,6 +7,5 @@ const {
 if (window.localStorage['jwt'] != undefined) {
     mountRoutes();
 } else {
-    m.mount(document.body, login)
-      
+    m.mount(document.body, login);
 }

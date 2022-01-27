@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 
 
 const router = express.Router();
-const { createUser, findUserByEmail } = require("../services/user");
+const { findUserByEmail } = require("../services/user");
 
 
 router.post('/login', async (req, res)=> {
@@ -28,6 +28,7 @@ router.post('/login', async (req, res)=> {
             const secret = process.env.secret;
             const token = jwt.sign({
                 userId: user[0].id,
+                name: user[0].email,
                 role : {
                     isAdmin: user[0].isadmin,
                     isUser: user[0].isuser

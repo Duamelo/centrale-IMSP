@@ -1,10 +1,8 @@
 var m = require('mithril');
-const jwt = require('../config/jwt')
 const {
     getRoutes
 } = require('../config/routes');
 import jwt_decode from "jwt-decode";
-// var login = require("./login")
 
 
 function isActive(route) {
@@ -20,10 +18,11 @@ module.exports = {
     oninit: () => {
         jeton = jwt_decode(window.localStorage['jwt']);
         role = jeton.role.isAdmin ? "admin" : "user";
+        console.log(jeton.name)
     },
 
     oncreate: () => {
-        if (role == "admin")
+        if (role == "admin" || role == "user")
             m.route.set("/tables")
         else
             m.route.set("/mesures")
@@ -31,7 +30,7 @@ module.exports = {
     view: function(vnode) {
         const email = "Email" //jwt.token.email
         return [
-            m("header.navbar.navbar-dark.sticky-top.bg-dark.flex-md-nowrap.p-0.shadow",
+            m("header.navbar.navbar-dark.sticky-top.flex-md-nowrap.p-0.shadow",
                 [
                     m("a.navbar-brand.col-md-3.col-lg-2.me-0.px-3[href='#']",
                         "Centrale Météorologique"
@@ -40,37 +39,18 @@ module.exports = {
                         m("span.navbar-toggler-icon")
                     ),
                     m("ul.navbar-nav.px-3",
-                        m("li.nav-item.text-nowrap",
-                            m("div.dropdown",
-                                [
-                                    m("a.d-block.link-light.text-decoration-none.dropdown-toggle[href='#'][id='dropdown'][data-bs-toggle='dropdown'][aria-expanded='false']",
-                                        email
-                                    ),
-                                    m("ul.dropdown-menu.text-small.shadow[aria-labelledby='dropdownUser2']",
-                                        [
-                                            m("li",
-                                                m("a.dropdown-item[href='#']", {
-                                                        onclick(e) {
-                                                            window.localStorage.removeItem('jwt')
-                                                            // m.mount(document.body, login)
-                                                            window.location.reload()
-                                                        }
-                                                    },
-                                                    "Se déconnecter"
-                                                )
-                                            ),
-                                            m("li",
-                                                m("hr.dropdown-divider")
-                                            ),
-                                            m("li",
-                                                m("a.dropdown-item[href='#']",
-                                                    "Paramètre"
-                                                )
-                                            )
-                                        ]
-                                    )
-                                ]
-                            )
+                        m("li.nav-item.text-nowrap", 
+                            [
+                                m("a.d-block.link-light.text-decoration-none.login",  {
+                                    onclick(e) {
+                                        window.localStorage.removeItem('jwt')
+                                        // m.mount(document.body, login)
+                                        window.location.reload()
+                                    }
+                                },
+                                    jeton.name
+                                )
+                            ]
                         )
                     )
                 ]
@@ -83,11 +63,11 @@ module.exports = {
                                 m('H3.nav-item', ""),
                                 m("ul.nav.flex-column", getRoutes().map((route) => {
                                         var disabled;
-                                      //  console.log(role + "  " + route.link)
-                                        if (role == "admin" || (role != "admin" && route.link == "/mesures"))
-                                            disabled = false;
-                                        else
+                                        if (role != "admin" && route.link == "/capteurs")
                                             disabled = true;
+                                            
+                                        else
+                                            disabled = false;
                                         return m("li.nav-item",
                                             m(m.route.Link, {
                                                     class: "nav-link " + (isActive(route.link) ? "active" : ""),

@@ -6,8 +6,6 @@ var mesure = require("./views/mesure");
 
 function mountRoutes() {
     document.body.className = "";
-    const role = "admin";
-    //if (role == "admin")
         m.route(document.body, "/", {
             "/": {
                 render: function() {
@@ -30,19 +28,5 @@ function mountRoutes() {
                 }
             }
         });
-
-   /* else
-        m.route(document.body, "/", {
-            "/": {
-                render: function() {
-                    return m(layout, m("h3", "Bienvenue sur l'interface administrateur"));
-                }
-            },
-            "/mesures": {
-                render: function() {
-                    return m(layout, m(mesure));
-                }
-            }
-        });*/
 }
 exports.mountRoutes = mountRoutes;

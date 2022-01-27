@@ -4,22 +4,20 @@ var mesure = require("../models/mesure.model");
 const graph = require("../components/chart");
 const graphPlotly = require("../components/plotly");
 
-const {
-    list
-} = require("../models/table.model");
-const {
-    tabs
-} = require("../components/tabs");
+const { list } = require("../models/table.model");
+const { tabs } = require("../components/tabs");
 const tables = require('../models/table.model')
 
-function randomColor(a) {
+function randomColor(a) 
+{
     return "rgba(" + randomNumber() + "," + randomNumber() + "," + randomNumber() + "," + a + ")"
 
-
-    function randomNumber() {
+    function randomNumber() 
+    {
         return Math.floor(Math.random() * 255);
     }
 }
+
 const form = {
     _isReady: false,
     get isReady() {
@@ -164,11 +162,6 @@ module.exports = {
         return [
             m(form),
             m(tabs)
-            // (form.isReady ?
-            //     m(table
-            //         , {
-            //         table: form.tables[form.id_tableau]
-            //     }) : m("H2", "Rien à affiche"))
         ]
     },
     onremove() {

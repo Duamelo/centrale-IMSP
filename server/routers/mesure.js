@@ -20,8 +20,6 @@ router.get(`/`, async (req, res)=>{
 
 router.get('/:table/:start_date/:end_date', async(req, res) => {
 
-//    const { table, start_date, end_date } = req.params;
-
   if (req.user.role.isUser || req.user.role.isAdmin )
   {
     console.log(req.params);

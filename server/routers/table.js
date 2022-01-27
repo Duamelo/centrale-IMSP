@@ -38,11 +38,13 @@ router.get(`/get_tables/:user_id`, async (req, res)=>{
         }
         else 
         {
+            console.log("Dans la fonction getTables()");
+
             const tables = await get_user_table(req.params.user_id);
     
             if(!tables)
                 res.status(500).json({success: false });
-        
+           
             const user = await findUserById(tables[0].auteur);
     
             if (user)
@@ -62,14 +64,6 @@ router.post('/table/create', async (req, res) => {
 
     if (req.user.role.isAdmin) 
     {
-        /*const data = {
-            auteur: "admin",
-            nom: "meteo",
-            sortie: "Ux",
-            fonction: "avg",
-            periode: "5s"
-        };
-        */
         const table = await create(req.body.nom, req.body.description, req.user.userId, req.body.periode);
 
         console.log(table);
@@ -77,9 +71,6 @@ router.post('/table/create', async (req, res) => {
         if(!table)
             res.status(500).json({success: false});
 
-        /*const row = await insertSortie(table[0].id, req.body.sortie, req.body.fonction);
-
-        if(row)*/
         res.status(200).send(table);
     }
     else    
@@ -176,7 +167,6 @@ router.delete("/table/:name/:variable/:fonction", async(req, res) => {
 
     if (req.user.role.isAdmin)
     {
-        var result;
         const table = await get_table_by_name(req.params.name);
         if(table)
          result = await deleteRowTableByName(table[0].id, req.params.variable, req.params.fonction);
@@ -193,7 +183,7 @@ router.delete("/table/:name/:variable/:fonction", async(req, res) => {
 
 router.get("/", async (req, res) => {
 
-    if (req.user.role.isAdmin)
+    if (req.user.role.isUser || req.user.role.isAdmin)
     {
         const tables = await tableList();
 

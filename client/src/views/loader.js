@@ -1,5 +1,4 @@
 var m = require("mithril");
-import jwt_decode from "jwt-decode";
 var capteur = require("./capteur");
 var table = require("./table");
 var layout = require("./layout");
@@ -76,7 +75,6 @@ exports.loadLogin = () => {
 
     exports.loadRoutes = () => {
         console.log("dans la fonction loadRoutes");
-        // const jwt = jwt_decode(window.localStorage['jwt'])
         const jwt = {
             payload: {
                 role: "user"

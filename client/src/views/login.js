@@ -5,11 +5,7 @@ const {
     mountRoutes
 } = require("../mounter");
 
-function jsonToForm(json) {
-    const formData = new FormData();
-    Object.keys(json).forEach(key => formData.append(key, json[key]));
-    return formData;
-}
+
 const credential = {
     error: "",
     errorDisplay() {

@@ -2,7 +2,6 @@ var express = require('express');
 const router = express.Router();
 const fs = require('fs');
 const multer = require('multer');
-const path = require('path');
 
 const { get_capteur_with_all_info, create } = require("../services/capteur");
 const { insert_sortie_into_capteur } = require("../services/sortie");

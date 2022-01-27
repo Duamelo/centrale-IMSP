@@ -1,10 +1,10 @@
 const m = require("mithril");
 const table = require('../models/table.model');
 const { Modal } = require("../components/modal");
-const timelength = require('../components/timelength')
 const server = require('../config/server');
 const jwt = require("../config/jwt");
 const capteur = require("../models/capteur.model");
+import jwt_decode from "jwt-decode";
 
 var nbAccordion = 0;
 
@@ -93,9 +93,7 @@ const AjouterUneTable = {
             body: {
                 nom: AjouterUneTable.nomTable,
                 description: AjouterUneTable.description,
-                periode: AjouterUneTable.periode, 
-               // sortie: AjouterUneTable.sortie,
-                //fonction: AjouterUneTable.fonction
+                periode: AjouterUneTable.periode
             }
         }).then((response)=>{
             console.group(response);
@@ -133,31 +131,7 @@ const AjouterUneTable = {
                         AjouterUneTable.periode = e.target.value
                     }
                 })
-            ),
-           /* m("div.mb-3",
-                m("label[for=formControlInput1].form-label", "Sortie"),
-                m("select.form-select", {
-                    onchange: (e) => {
-                        AjouterUneTable.sortie = e.target.value
-                    }
-                }, capteur.variableList.map((variable, index) => {
-                    return m("option", {
-                        value: index
-                    }, variable);
-                }))
-        ),
-        m("div.mb-3",
-                m("label[for=formControlInput1].form-label", "Fonction"),
-                m("select.form-select", {
-                    onchange: (e) => {
-                        AjouterUneTable.fonction = e.target.value
-                    }
-                }, fonc.map((fn, index) => {
-                    return m("option", {
-                        value: index
-                    }, fn);
-                }))                
-            )*/
+            )
         ]
     }
 }
@@ -200,7 +174,7 @@ const Associer = {
                 m("select.form-select", {
                     onchange: (e) => {
                         console.log(e.target.value);
-                        this.table = e.target.value
+                        Associer.table = e.target.value
                     }
                 }, table.list.map((variable, index) => {
                     return m("option", {
@@ -212,7 +186,7 @@ const Associer = {
                 m("select.form-select", {
                     onchange: (e) => {
                         console.log(e.target.value);
-                        this.username = e.target.value
+                        Associer.username = e.target.value
                     }
                 }, this.utilisateurs.map((variable, index) => {
                     return m("option", {
@@ -224,9 +198,15 @@ const Associer = {
     }
 }
 
-
+var jeton;
+var role;
 module.exports = {
     oninit() {
+
+        jeton = jwt_decode(window.localStorage['jwt']);
+        role = jeton.role.isAdmin ? "admin" : "user";
+
+
         table.getTables(jwt.token.userId, (list) => {
             list.forEach(element => {
                 element["ajouterVariable"] = AjouterVariable(element)
@@ -249,7 +229,7 @@ module.exports = {
                 "class": "accordion",
                 "id": "accordionPanelsStayOpenExample"
             }, [
-                m("h3.marge", [m("button.bordure.btn.btn-outline-dark[type=button][data-bs-target=#modal][data-bs-toggle=modal]", {
+                m("h3.marge",[m("button.bordure.btn.btn-outline-dark[type=button][data-bs-target=#modal][data-bs-toggle=modal]", {
                     style: {
                         float: "right"
                     },
@@ -273,7 +253,10 @@ module.exports = {
                             }
                         })
                     }
-                }, "Associer")], "Liste des tables"),
+                }, "Associer")].map ( (noeud) => {
+                    if (role == "admin")
+                        return noeud;
+                }), "Liste des tables"),
                 table.list.map(function (t) {
                     console.log(table);
                     nbAccordion++;
