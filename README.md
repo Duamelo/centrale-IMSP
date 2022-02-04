@@ -33,10 +33,6 @@ Un framework puissant, efficace, rapide en exécution. Le server est en node js 
 
 ### 
 
-$ cd decode/
-$ make
-$ ./decode <path_to_file.dat>  <path_to_dest_directory>
-
-
-faire un make
-
+cd decode/
+make
+./decode <path_to_file.dat>  <path_to_dest_directory>
