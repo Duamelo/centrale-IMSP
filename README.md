@@ -25,3 +25,18 @@ Un framework puissant, efficace, rapide en exécution. Le server est en node js 
 <img src="./client/assets/img/im16.png" width="300" height="100"/>
 <img src="./client/assets/img/im17.png" width="300" height="100"/>
 <img src="./client/assets/img/im18.png" width="300" height="100"/>
+
+
+# Module decode
+
+## Utilisation
+
+### 
+
+$ cd decode/
+$ make
+$ ./decode <path_to_file.dat>  <path_to_dest_directory>
+
+
+faire un make
+

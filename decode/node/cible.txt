@@ -1,5 +1,0 @@
-Voici un algorithme assez simple qui aboutit à ce résultat, qui ne requiert aucun module externe.
-
-On crée un tableau associatif fileBuffer avec en clé la ressource pour un fichier et en valeur, un tableau contenant les lignes lues.
-Le tableau filePtr a pour clé également la ressource d'un fichier et pour valeur la position dans le fichier.
-On teste si le tableau a un contenu. Si c'est le cas, on lit le premièr élément qui est supprimé par shift.
