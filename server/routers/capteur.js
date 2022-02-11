@@ -23,6 +23,8 @@ const upload = multer({ storage: storage });
 
 router.get('/', async (req, res) => {
 
+    console.log(req.user);
+    
     if (req.user.role.isAdmin) {
         const capteur = await get_capteur_with_all_info();
 
@@ -50,7 +52,7 @@ router.post("/capteur", upload.single('capteur'),  async (req, res) => {
             var data = row.split("\n");
             console.log(data);
             
-            n_capteur = data[0];
+            n_capteur = dateyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsIm5hbWUiOiJkaWFsbyIsInJvbGUiOnsiaXNBZG1pbiI6dHJ1ZSwiaXNVc2VyIjp0cnVlfSwiaWF0IjoxNjQ0NDg1ODg4LCJleHAiOjE2NDQ1NzIyODh9.lY5PX4G1xxoTEZJvLdY2BVeXoZVoOut8Lu-txe5EzgUa[0];
             desc = data[1];
             console.log(n_capteur, desc);
 

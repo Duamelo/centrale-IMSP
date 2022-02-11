@@ -109,13 +109,14 @@ const table = {
         const table = mesure.mesure.GetTableList(id)
         if (table.length === 0)
             return m("H1", "La table ne contient aucune valeur")
-        return m("table.table", [
-            m("thead", m("tr", Object.keys(table[0]).map((value) => {
-                return m("th[scope='col']", value)
+        return m("table.table.container", [
+            m("thead", m("tr.row", Object.keys(table[0]).map((value) => {
+                return m("th[scope='col'].col-sm", value)
             }))),
             m("tbody", table.map((value, index) => {
-                return m("tr", Object.keys(value).map((key) => {
-                    return m('td', value[key])
+                return m("tr.row", Object.keys(value).map((key) => {
+                    
+                    return m('td.col-sm', value[key])
                 }))
             }))
         ])
@@ -131,7 +132,7 @@ module.exports = {
                 return (form.isReady ? m(tableView) :
                     m("img.tableau", {
                         alt: "Rien à affiche",
-                        src: "assets/img/tableau.png"
+                        src: "client/assets/img/tableau.png"
                     }))
             }
         })
@@ -142,7 +143,7 @@ module.exports = {
                     max: mesure.mesure.data.time.length
                 }) : m("img.graphe", {
                     alt: "Rien à affiche",
-                    src: "assets/img/graphe.png"
+                    src: "client/assets/img/graphe.png"
                 }))
             }
         }),
@@ -153,7 +154,7 @@ module.exports = {
                     max: mesure.mesure.data.time.length
                 }) : m("img.graphe", {
                     alt: "Rien à affiche",
-                    src: "assets/img/graphe.png"
+                    src: "client/assets/img/graphe.png"
                 }))
             }
         })

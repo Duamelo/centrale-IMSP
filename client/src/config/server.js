@@ -1,3 +1,3 @@
 module.exports = {
-    url: "http://centrale.imsp-uac.org/api/v1"
+    url: "http://localhost:4000/api/v1"
 }

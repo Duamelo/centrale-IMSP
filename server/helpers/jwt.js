@@ -4,7 +4,6 @@ const expressJwt = require('express-jwt');
 function authJwt()
 {
     const secret = process.env.secret;
-    const api = process.env.API_URL;
 
     return expressJwt({
         secret,
@@ -16,7 +15,9 @@ function authJwt()
            // {url:/\/api\/v1\/mesures(.*)/ , methods: ['GET', 'OPTIONS']},
             {url:/\/api\/v1\/auth(.*)/ , methods: ['POST', 'OPTIONS']},
             {url:/\/api\/v1\/auth(.*)/ , methods: ['GET', 'OPTIONS']},
-            {url:/\/api\/v1\/users(.*)/ , methods: ['POST', 'OPTIONS']}
+            {url:/\/api\/v1\/users(.*)/ , methods: ['POST', 'OPTIONS']},
+            {url:/\/api\/v1\/admin(.*)/ , methods: ['POST', 'OPTIONS']},
+            {url:/\/api\/v1\/centrale(.*)/ , methods: ['GET', 'OPTIONS']}
             
             
         ]

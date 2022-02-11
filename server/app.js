@@ -38,6 +38,7 @@ const tablesRouter = require('./routers/table');
 const capteursRouter = require('./routers/capteur');
 const usersRouter = require('./routers/users');
 const authRouter = require('./routers/auth');
+const adminRouter = require('./routers/admin');
 
 
 app.use(`${api}/mesures`, mesuresRouter);
@@ -46,10 +47,10 @@ app.use(`${api}/tables`, tablesRouter);
 app.use(`${api}/capteurs`, capteursRouter);
 app.use(`${api}/users`, usersRouter);
 app.use(`${api}/auth`, authRouter);
+app.use(`${api}/admin`, adminRouter);
 
-
-app.get(`${api}/:name`, (req, res)=>{
-    res.send('hello ' + req.params.name);
+app.get(`${api}/centrale`, (req, res)=>{
+    res.send('Bienvenue sur le serveur de la centrale météorologique de l\'IMSP');
 });
 
 
