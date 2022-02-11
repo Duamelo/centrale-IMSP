@@ -9,18 +9,19 @@ const { createUser, findUserByEmail } = require("../services/user");
 const { emailList } = require("../services/user");
 
 
-router.get('/register', async (req, res) => {
+router.post('/register', async (req, res) => {
     
-    console.log(req);
+    console.log(req.user);
 
-    if (req.user.role.isAdmin)
-    {
+   
         const { email, password } = req.body;
         console.log(req.body);
     
         let userExist = await findUserByEmail(email);
         console.log(userExist);
-        if(userExist) return res.status(400).send('Email is taken');
+       console.log(typeof(userExist))
+
+        if(userExist.length !== 0) return res.status(400).send('Email is taken');
     
         console.log('pass');
     
@@ -38,8 +39,6 @@ router.get('/register', async (req, res) => {
         console.log(user);
     
         res.status(200).send(user);
-    
-    }
   
 })
 

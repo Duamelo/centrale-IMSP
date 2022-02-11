@@ -3,6 +3,7 @@ var capteur = require("./views/capteur");
 var table = require("./views/table");
 var layout = require("./views/layout");
 var mesure = require("./views/mesure");
+const create_user = require("./views/create_user");
 
 function mountRoutes() {
     document.body.className = "";
@@ -25,6 +26,11 @@ function mountRoutes() {
             "/mesures": {
                 render: function() {
                     return m(layout, m(mesure));
+                }
+            },
+            "/creer_utilisateur": {
+                render: function() {
+                    return m(layout, m(create_user));
                 }
             }
         });

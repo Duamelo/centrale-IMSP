@@ -245,3 +245,8 @@ html,
     right: 400px;
     font-weight: 500;
 }
+
+.register{
+    position: relative;
+    top: 70px;
+}

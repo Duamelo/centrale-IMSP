@@ -37,15 +37,18 @@ module.exports = {
                     m("button.navbar-toggler.position-absolute.d-md-none.collapsed[type='button'][data-bs-toggle='collapse'][data-bs-target='#sidebarMenu'][aria-controls='sidebarMenu'][aria-expanded='false'][aria-label='Toggle navigation']",
                         m("span.navbar-toggler-icon")
                     ),
-
                     m("ul.navbar-nav.mr-auto", 
                         role == "admin" ?
                         m("li.nav-item.active.user", 
-                        m("a.d-block.link-light.text-decoration-none[href='#']",
-                            [
-                            "Créer un utilisateur"
-                            ]
-                        )
+                            m(m.route.Link, {
+                                selector: "a",
+                                options: {replace: true},
+                                href: "/creer_utilisateur",
+                                disabled: false,
+                                class: "d-block link-light text-decoration-none",
+                                "data-foo": 1,
+                            }, "Créer un utilisateur"
+                            )
                         ) :
                         ""
                     ),

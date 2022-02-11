@@ -23,7 +23,7 @@
 
     "paths": {
         "/admin/register": {
-            "get": {
+            "post": {
                 "tags": ["Admin"],
                 "summary": "Enregister un nouvel administrateur",
                 "consomme": ["application/json"],
@@ -80,7 +80,7 @@
             }            
         },
         "/users/register": {
-            "get": {
+            "post": {
                 "tags": ["Users"],
                 "consomme": ["application/json"],
                 "produces": ["application/json"],
