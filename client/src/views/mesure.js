@@ -137,7 +137,7 @@ module.exports = {
             }
         })
         tabs.addTab({
-            name: "Graphe",
+            name: "chart",
             view() {
                 return (form.isReady ? m(graphView, {
                     max: mesure.mesure.data.time.length
@@ -148,7 +148,7 @@ module.exports = {
             }
         }),
         tabs.addTab({
-            name: "Graphe2",
+            name: "plotly",
             view() {
                 return (form.isReady ? m(plotlyView, {
                     max: mesure.mesure.data.time.length
