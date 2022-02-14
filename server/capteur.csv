@@ -1,8 +1,5 @@
-test2
-capteur test
-test_x,0,0,10,test2
-test_y,0,0,10,test2
-test_z,0,0,10,test2
-test_e,0,0,10,test2
-test_f,0,0,10,test2
-test_g,0,0,10,test2
+nom_capteur
+description_capteur
+Ux,unite,v_min,v_max,nom_capteur
+Uy,unite,v_min,v_max,nom_capteur
+Uz,unite,v_min,v_max,nom_capteur
