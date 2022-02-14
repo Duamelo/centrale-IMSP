@@ -232,8 +232,8 @@ const plotlyView = {
     view(vnode) {
         return m(graphPlotly, {
             layout: {
-                titile: "Time Series",
-                xaxis: {
+                title: "Time Series"
+               /* xaxis: {
                     autorange: true,
                     range: ['2021-09-01', '2021-10-01'],
                     rangeselectore: {buttons: [
@@ -257,7 +257,7 @@ const plotlyView = {
                 yaxis: {
                     autorange: true,
                     type: 'linear'
-                }
+                }*/
             },
             time: mesure.mesure.data.time,
             datas: Object.keys(mesure.mesure.data).filter((value) => value != "time").map((variable) => {
@@ -266,7 +266,7 @@ const plotlyView = {
                     mode: "lines",
                     name: variable,
                     y: mesure.mesure.data[variable], //.slice(0, this.size),
-                    line: {color: '#7F7F7F' }
+                    line: {color:randomColor(5)}
                 };
             })
         })
