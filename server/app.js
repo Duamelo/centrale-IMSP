@@ -48,8 +48,8 @@ app.use(`${api}/users`, usersRouter);
 app.use(`${api}/auth`, authRouter);
 
 
-app.get(`${api}/:name`, (req, res)=>{
-    res.send('hello ' + req.params.name);
+app.get(`${api}/centrale`, (req, res)=>{
+    res.send('Bienvenu sur le serveur de la centrale');
 });
 
 
@@ -58,5 +58,5 @@ app.get(`${api}/:name`, (req, res)=>{
 app.listen(process.env.PORT || 3000, () =>  {
     console.log(process.env.PORT);
     console.log(api);
-    console.log('Server is running http://localhost:'+ process.env.PORT);
+    console.log('Server is running https://meteo.imsp-uac.org/api/v1');
 });

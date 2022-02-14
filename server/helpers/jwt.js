@@ -16,9 +16,9 @@ function authJwt()
            // {url:/\/api\/v1\/mesures(.*)/ , methods: ['GET', 'OPTIONS']},
             {url:/\/api\/v1\/auth(.*)/ , methods: ['POST', 'OPTIONS']},
             {url:/\/api\/v1\/auth(.*)/ , methods: ['GET', 'OPTIONS']},
-            {url:/\/api\/v1\/users(.*)/ , methods: ['POST', 'OPTIONS']}
-            
-            
+            {url:/\/api\/v1\/users(.*)/ , methods: ['POST', 'OPTIONS']},
+	    {url:/\/api\/v1\/centrale/, methods:['GET', 'OPTIONS']},
+	    {url:/\/api\/v1\/accueil/, methods: ['GET', 'OPTIONS']}
         ]
     })
 }
