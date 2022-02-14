@@ -46,6 +46,7 @@ const credential = {
                 console.log(response);
                 //jwt.token = response.token;
                 credential.result = "success";
+                credential.email = credential.password = "";
                // m.route.set("/tables");
             }
         }, (error) => {

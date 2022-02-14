@@ -3,7 +3,8 @@ var capteur = require("./views/capteur");
 var table = require("./views/table");
 var layout = require("./views/layout");
 var mesure = require("./views/mesure");
-const create_user = require("./views/create_user");
+const create_user = require("./views/create_user"); 
+const admin_register = require("./views/admin_register");
 
 function mountRoutes() {
     document.body.className = "";
@@ -32,7 +33,8 @@ function mountRoutes() {
                 render: function() {
                     return m(layout, m(create_user));
                 }
-            }
+            },
+            "/admin_register": admin_register
         });
 }
 
