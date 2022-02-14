@@ -9,38 +9,47 @@ const { createUser, findUserByEmail } = require("../services/user");
 const { emailList } = require("../services/user");
 
 
-router.post('/', async (req, res) => {
+router.post('/register', async (req, res) => {
     
+    console.log(req.user);
+
+   
+        const { email, password } = req.body;
+        console.log(req.body);
     
-    const { email, isAdmin, isUser, password } = req.body;
-    console.log(req.body);
+        let userExist = await findUserByEmail(email);
+        console.log(userExist);
+       console.log(typeof(userExist))
 
-    let userExist = await findUserByEmail(email);
-    console.log(userExist);
-    if(!userExist) return res.status(400).send('Email is taken');
-
-    console.log('pass');
-
-    let passwordhash = bcrypt.hashSync(password, 10);
-
-    console.log(passwordhash);
-
-    const user = await createUser(email, isAdmin, isUser, passwordhash );
+        if(userExist.length !== 0) return res.status(400).send('Email is taken');
     
-    console.log("user created" + user);
-
-    if (!user)
-        return res.status(400).send('the user cannot be created');
-
-    console.log(user);
-
-    res.status(200).send(user);
-
+        console.log('pass');
+    
+        let passwordhash = bcrypt.hashSync(password, 10);
+    
+        console.log(passwordhash);
+    
+        const user = await createUser(email, false, true, passwordhash );
+        
+        console.log("user created" + user);
+    
+        if (!user)
+            return res.status(400).send('the user cannot be created');
+    
+        console.log(user);
+    
+        res.status(200).send(user);
+  
 })
+
+
+
 
 
 router.get("/", async (req, res) => {
     
+    console.log(req.user);
+
     if (req.user.role.isAdmin)
     {
         const users = await emailList();

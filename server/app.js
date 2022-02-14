@@ -38,6 +38,7 @@ const tablesRouter = require('./routers/table');
 const capteursRouter = require('./routers/capteur');
 const usersRouter = require('./routers/users');
 const authRouter = require('./routers/auth');
+const adminRouter = require('./routers/admin');
 
 
 app.use(`${api}/mesures`, mesuresRouter);
@@ -46,6 +47,7 @@ app.use(`${api}/tables`, tablesRouter);
 app.use(`${api}/capteurs`, capteursRouter);
 app.use(`${api}/users`, usersRouter);
 app.use(`${api}/auth`, authRouter);
+app.use(`${api}/admin`, adminRouter);
 
 
 app.get(`${api}/centrale`, (req, res)=>{

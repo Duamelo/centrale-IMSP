@@ -352,7 +352,7 @@ module.exports = {
                                                 
                                                             table.removeVariableFromTable(t, index)
                                                         }
-                                                    }, m('img.trash', { 'src': 'assets/img/trash.png' }))),
+                                                    }, m('img.trash', { 'src': 'client/assets/img/trash.png' }))),
                                                     m("td", vf.vare),
                                                     m("td", vf.fonc),
                                                     m("td")

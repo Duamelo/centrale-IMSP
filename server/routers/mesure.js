@@ -6,6 +6,9 @@ const {  generate_table_with_stat } = require("../services/mesure");
 const { get_table_by_name,get_table } = require("../services/table");
 
 
+
+
+
 router.get(`/`, async (req, res)=>{
     const mesures = await get_all_mesures();
 

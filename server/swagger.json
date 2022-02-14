@@ -22,7 +22,45 @@
     "produces": ["application/json"],
 
     "paths": {
-        "/users": {
+        "/admin/register": {
+            "post": {
+                "tags": ["Admin"],
+                "summary": "Enregister un nouvel administrateur",
+                "consomme": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "name": "email",
+                        "in": "body",
+                        "description": "nom de l'utilisateur",
+                        "required": "true",
+                        "type": "string",
+                        "format": "formData"
+                    },
+                    {
+                        "name": "password",
+                        "in": "body",
+                        "description": "mot de passe de l'utilisateur",
+                        "required": "true",
+                        "type": "string",
+                        "format": "formData"
+                    }
+                    
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "500": {
+                        "description": "erreur interne au serveur"
+                    },
+                    "400": {
+                        "description": "Le compte administrateur ne peut pas être créé"
+                    }
+                }
+            }            
+        },
+        "/users/": {
             "get": {
                 "tags": ["Users"],
                 "summary": "Obtenir tous les utilisateurs du système",
@@ -39,12 +77,14 @@
                         "description": "Utilisateur non autorisé"
                     }
                 }
-            },
+            }            
+        },
+        "/users/register": {
             "post": {
                 "tags": ["Users"],
                 "consomme": ["application/json"],
                 "produces": ["application/json"],
-                "summary": "Créer un nouvel utilisateur dans le système",
+                "summary": "Créer un nouvel utilisateur dans le système. Seul l'admin peut créer les utilisateurs",
                 "parameters": [
                     {
                         "name": "email",
@@ -52,22 +92,6 @@
                         "description": "nom de l'utilisateur",
                         "required": "true",
                         "type": "string",
-                        "format": "formData"
-                    },
-                    {
-                        "name": "isAdmin",
-                        "in": "body",
-                        "description": "role de l'utilisateur",
-                        "required": "true",
-                        "type": "boolean",
-                        "format": "formData"
-                    },
-                    {
-                        "name": "isUser",
-                        "in": "body",
-                        "description": "role de l'utilisateur",
-                        "required": "true",
-                        "type": "boolean",
                         "format": "formData"
                     },
                     {
