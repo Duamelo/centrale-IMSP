@@ -1,5 +1,5 @@
 module.exports = {
-    url: "http://10.16.7.150:4000/api/v1"
+    url: "https://meteo.imsp-uac.org/api/v1"
 }
 
 
