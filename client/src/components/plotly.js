@@ -1,12 +1,12 @@
 const m = require('mithril');
-var Plotly = require('plotly.js-dist-min');
+var Plotly = require('plotly.js-dist');
 
 
 const plotly = {
     x:[],
     data: [],
     layout: {},
-    canva: undefined,
+    canvas: undefined,
     graphPlot: undefined,
 
     convert(data) {
@@ -17,12 +17,12 @@ const plotly = {
             y: data.y,
             line: data.line
         }
-
     },
 
     oncreate(vnode) {
-        plotly.canva = document.getElementById("canva");
-        plotly.graphPlot = Plotly.newPlot(canva, data, layout);
+        plotly.canvas = document.getElementById("mydiv");
+        plotly.graphPlot = Plotly.newPlot(this.canvas, this.data, this.layout);
+        console.log(this.data);
     },
 
     oninit(vnode) {
@@ -35,7 +35,7 @@ const plotly = {
         console.log(plotly.data);
     },
     view(vnode) {
-        return m("canvas[id='canva'][width='400'][height='400']")
+        return m("div[id='mydiv'][width='900'][height='900']")
     }
 }
 

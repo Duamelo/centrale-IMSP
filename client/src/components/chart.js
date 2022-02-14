@@ -8,9 +8,9 @@ const chart = {
     datasets: [],
     canvas: undefined,
     graph: undefined,
-    changeChartType(type) {
+    /*changeChartType(type) {
         this.graph.type = type;
-    },
+    },*/
     convert(dataset) {
         return {
             label: dataset.label,
@@ -37,7 +37,7 @@ const chart = {
                 }
             }
         })
-        changeChartType()
+       // changeChartType()
     },
     oninit(vnode) {
         chart.type = vnode.attrs.type
