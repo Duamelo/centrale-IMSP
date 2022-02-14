@@ -19,8 +19,6 @@ function authJwt()
             {url:/\/api\/v1\/admin\/register(.*)/ , methods: ['POST', 'OPTIONS']},
             {url:/\/api\/v1\/centrale(.*)/ , methods: ['GET', 'OPTIONS']},
             {url:/\/api\/v1\/users\/register(.*)/ , methods: ['POST', 'OPTIONS']}
-            
-            
         ]
     })
 }
